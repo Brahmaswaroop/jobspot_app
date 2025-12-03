@@ -2,7 +2,6 @@
     package="com.example.jobspot_app">
     <application
         android:label="jobspot_app"
-        android:name="io.flutter.app.FlutterApplication"
         android:icon="@mipmap/ic_launcher">
         <activity
             android:name=".MainActivity"
