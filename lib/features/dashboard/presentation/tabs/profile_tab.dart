@@ -57,7 +57,7 @@ class ProfileTab extends StatelessWidget {
                       'john.doe@example.com',
                       style: TextStyle(
                         fontSize: 16,
-                        color: Colors.white.withOpacity(0.9),
+                        color: Colors.white.withValues(alpha: 0.9),
                       ),
                     ),
                     const SizedBox(height: 16),

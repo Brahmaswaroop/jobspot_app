@@ -23,6 +23,8 @@ class _DashboardScreenState extends State<DashboardScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final Color indicatorColor = Theme.of(context).primaryColor;
+
     return Scaffold(
       body: IndexedStack(
         index: _selectedIndex,
@@ -35,6 +37,10 @@ class _DashboardScreenState extends State<DashboardScreen> {
             _selectedIndex = index;
           });
         },
+        backgroundColor: Colors.white,
+        indicatorColor: indicatorColor.withValues(alpha: 0.15),
+        labelBehavior: NavigationDestinationLabelBehavior.onlyShowSelected,
+        height: 70,
         destinations: const [
           NavigationDestination(
             icon: Icon(Icons.home_outlined),
