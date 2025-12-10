@@ -1,25 +1,23 @@
 import 'package:flutter/material.dart';
 import 'package:jobspot_app/core/theme/app_theme.dart';
-import 'package:jobspot_app/features/dashboard/presentation/tabs/home_tab.dart';
-import 'package:jobspot_app/features/dashboard/presentation/tabs/search_tab.dart';
-import 'package:jobspot_app/features/dashboard/presentation/tabs/map_tab.dart';
-import 'package:jobspot_app/features/dashboard/presentation/tabs/profile_tab.dart';
-import 'package:jobspot_app/features/dashboard/presentation/tabs/employer_dashboard_tab.dart';
+import 'package:jobspot_app/features/seeker_dashboard/presentation/tabs/home_tab.dart';
+import 'package:jobspot_app/features/seeker_dashboard/presentation/tabs/search_tab.dart';
+import 'package:jobspot_app/features/seeker_dashboard/presentation/tabs/map_tab.dart';
+import 'package:jobspot_app/features/seeker_dashboard/presentation/tabs/profile_tab.dart';
 
-class DashboardScreen extends StatefulWidget {
-  const DashboardScreen({super.key});
+class SeekerDashboardScreen extends StatefulWidget {
+  const SeekerDashboardScreen({super.key});
 
   @override
-  State<DashboardScreen> createState() => _DashboardScreenState();
+  State<SeekerDashboardScreen> createState() => _SeekerDashboardScreenState();
 }
 
-class _DashboardScreenState extends State<DashboardScreen> {
+class _SeekerDashboardScreenState extends State<SeekerDashboardScreen> {
   int _selectedIndex = 0;
 
   final List<Widget> _screens = [
     const HomeTab(),
     const SearchTab(),
-    const EmployerDashboardTab(),
     const MapTab(),
     const ProfileTab(),
   ];
@@ -27,10 +25,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: IndexedStack(
-        index: _selectedIndex,
-        children: _screens,
-      ),
+      body: IndexedStack(index: _selectedIndex, children: _screens),
       bottomNavigationBar: NavigationBar(
         selectedIndex: _selectedIndex,
         onDestinationSelected: (index) {
@@ -39,33 +34,28 @@ class _DashboardScreenState extends State<DashboardScreen> {
           });
         },
         backgroundColor: AppColors.white,
-        indicatorColor: AppColors.purple.withValues(alpha: .15),
+        indicatorColor: AppColors.purple.withValues(alpha: .2),
         labelBehavior: NavigationDestinationLabelBehavior.onlyShowSelected,
         height: 70,
         destinations: const [
           NavigationDestination(
             icon: Icon(Icons.home_outlined),
-            selectedIcon: Icon(Icons.home),
+            selectedIcon: Icon(Icons.home, color: AppColors.purple),
             label: 'Home',
           ),
           NavigationDestination(
             icon: Icon(Icons.search_outlined),
-            selectedIcon: Icon(Icons.search),
+            selectedIcon: Icon(Icons.search, color: AppColors.purple),
             label: 'Search',
           ),
           NavigationDestination(
-            icon: Icon(Icons.work_outline),
-            selectedIcon: Icon(Icons.work),
-            label: 'Employer',
-          ),
-          NavigationDestination(
             icon: Icon(Icons.pin_drop_outlined),
-            selectedIcon: Icon(Icons.pin_drop_rounded),
+            selectedIcon: Icon(Icons.pin_drop_rounded, color: AppColors.purple),
             label: 'Job Map',
           ),
           NavigationDestination(
             icon: Icon(Icons.person_outline),
-            selectedIcon: Icon(Icons.person),
+            selectedIcon: Icon(Icons.person, color: AppColors.purple),
             label: 'Profile',
           ),
         ],

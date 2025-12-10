@@ -1,7 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:jobspot_app/features/dashboard/presentation/screens/dashboard_screen.dart';
+import 'package:jobspot_app/features/admin_dashboard/presentation/screens/admin_dashboard_screen.dart';
 import 'package:jobspot_app/features/auth/presentation/screens/signup_screen.dart';
 import 'package:jobspot_app/features/auth/presentation/widgets/social_button.dart';
+import 'package:jobspot_app/features/employer_dashboard/presentation/screens/employer_dashboard_screen.dart';
+
+import 'package:jobspot_app/features/seeker_dashboard/presentation/seeker_dashboard_screen.dart';
+import 'package:jobspot_app/features/splash/presentation/screen/splash_screen.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -27,7 +31,7 @@ class _LoginScreenState extends State<LoginScreen> {
     if (_formKey.currentState!.validate()) {
       Navigator.pushReplacement(
         context,
-        MaterialPageRoute(builder: (context) => const DashboardScreen()),
+        MaterialPageRoute(builder: (context) => const SplashScreen()),
       );
     }
   }
@@ -171,7 +175,7 @@ class _LoginScreenState extends State<LoginScreen> {
                           Navigator.pushReplacement(
                             context,
                             MaterialPageRoute(
-                                builder: (context) => const DashboardScreen()),
+                                builder: (context) => const SeekerDashboardScreen()),
                           );
                         },
                       ),
@@ -185,7 +189,7 @@ class _LoginScreenState extends State<LoginScreen> {
                           Navigator.pushReplacement(
                             context,
                             MaterialPageRoute(
-                                builder: (context) => const DashboardScreen()),
+                                builder: (context) => const EmployerDashboardScreen()),
                           );
                         },
                       ),
@@ -199,7 +203,7 @@ class _LoginScreenState extends State<LoginScreen> {
                     Navigator.pushReplacement(
                       context,
                       MaterialPageRoute(
-                          builder: (context) => const DashboardScreen()),
+                          builder: (context) => const AdminDashboardScreen()),
                     );
                   },
                   icon: const Icon(Icons.phone_outlined),

@@ -3,9 +3,11 @@ import 'package:google_fonts/google_fonts.dart';
 
 class AppColors {
   static const Color purple = Color(0xFF6C63FF);
+  static const Color darkPurple = Color(0xFF4C2D86);
   static const Color orange = Color(0xFFFF8F00);
   static const Color grey = Color(0xFFF0F0F0);
   static const Color white = Color(0xFFFFFFFF);
+  static const Color whiteBackground = Color(0xFFF8F8FA);
   static const Color black = Color(0xFF000000);
   static const Color darkBackground = Color(0xFF121212);
   static const Color darkSurface = Color(0xFF1E1E1E);
