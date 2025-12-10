@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:jobspot_app/core/theme/app_theme.dart';
 import 'package:jobspot_app/features/auth/presentation/screens/login_screen.dart';
 import 'package:jobspot_app/features/dashboard/presentation/widgets/profile_menu_item.dart';
 
@@ -7,8 +8,10 @@ class ProfileTab extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final textTheme = Theme.of(context).textTheme;
+
     return Scaffold(
-      backgroundColor: Colors.grey[50],
+      backgroundColor: AppColors.grey,
       body: SafeArea(
         child: SingleChildScrollView(
           child: Column(
@@ -19,7 +22,7 @@ class ProfileTab extends StatelessWidget {
                 padding: const EdgeInsets.all(24),
                 decoration: const BoxDecoration(
                   gradient: LinearGradient(
-                    colors: [Color(0xFF6C63FF), Color(0xFFFF6B35)],
+                    colors: [AppColors.purple, AppColors.orange],
                     begin: Alignment.topLeft,
                     end: Alignment.bottomRight,
                   ),
@@ -39,26 +42,19 @@ class ProfileTab extends StatelessWidget {
                         child: const Icon(
                           Icons.person,
                           size: 50,
-                          color: Color(0xFF6C63FF),
+                          color: AppColors.purple,
                         ),
                       ),
                     ),
                     const SizedBox(height: 16),
-                    const Text(
+                    Text(
                       'John Doe',
-                      style: TextStyle(
-                        fontSize: 24,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.white,
-                      ),
+                      style: textTheme.headlineMedium?.copyWith(color: Colors.white),
                     ),
                     const SizedBox(height: 4),
                     Text(
                       'john.doe@example.com',
-                      style: TextStyle(
-                        fontSize: 16,
-                        color: Colors.white.withValues(alpha: 0.9),
-                      ),
+                      style: textTheme.bodyLarge?.copyWith(color: Colors.white.withOpacity(0.9)),
                     ),
                     const SizedBox(height: 16),
                     // Edit Profile Button
@@ -67,8 +63,8 @@ class ProfileTab extends StatelessWidget {
                       icon: const Icon(Icons.edit, size: 18),
                       label: const Text('Edit Profile'),
                       style: ElevatedButton.styleFrom(
-                        backgroundColor: Colors.white,
-                        foregroundColor: const Color(0xFF6C63FF),
+                        backgroundColor: AppColors.white,
+                        foregroundColor: AppColors.purple,
                         padding: const EdgeInsets.symmetric(
                           horizontal: 24,
                           vertical: 12,
@@ -167,10 +163,7 @@ class ProfileTab extends StatelessWidget {
                     // App Version
                     Text(
                       'Version 1.0.0',
-                      style: TextStyle(
-                        color: Colors.grey[600],
-                        fontSize: 14,
-                      ),
+                      style: textTheme.bodyMedium?.copyWith(color: Colors.grey[600]),
                     ),
                     const SizedBox(height: 20),
                   ],

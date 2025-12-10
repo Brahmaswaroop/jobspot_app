@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:jobspot_app/core/theme/app_theme.dart';
 import 'package:jobspot_app/features/dashboard/presentation/tabs/home_tab.dart';
 import 'package:jobspot_app/features/dashboard/presentation/tabs/search_tab.dart';
 import 'package:jobspot_app/features/dashboard/presentation/tabs/map_tab.dart';
 import 'package:jobspot_app/features/dashboard/presentation/tabs/profile_tab.dart';
+import 'package:jobspot_app/features/dashboard/presentation/tabs/employer_dashboard_tab.dart';
 
 class DashboardScreen extends StatefulWidget {
   const DashboardScreen({super.key});
@@ -17,14 +19,13 @@ class _DashboardScreenState extends State<DashboardScreen> {
   final List<Widget> _screens = [
     const HomeTab(),
     const SearchTab(),
+    const EmployerDashboardTab(),
     const MapTab(),
     const ProfileTab(),
   ];
 
   @override
   Widget build(BuildContext context) {
-    final Color indicatorColor = Theme.of(context).primaryColor;
-
     return Scaffold(
       body: IndexedStack(
         index: _selectedIndex,
@@ -37,8 +38,8 @@ class _DashboardScreenState extends State<DashboardScreen> {
             _selectedIndex = index;
           });
         },
-        backgroundColor: Colors.white,
-        indicatorColor: indicatorColor.withValues(alpha: 0.15),
+        backgroundColor: AppColors.white,
+        indicatorColor: AppColors.purple.withOpacity(0.15),
         labelBehavior: NavigationDestinationLabelBehavior.onlyShowSelected,
         height: 70,
         destinations: const [
@@ -51,6 +52,11 @@ class _DashboardScreenState extends State<DashboardScreen> {
             icon: Icon(Icons.search_outlined),
             selectedIcon: Icon(Icons.search),
             label: 'Search',
+          ),
+          NavigationDestination(
+            icon: Icon(Icons.work_outline),
+            selectedIcon: Icon(Icons.work),
+            label: 'Employer',
           ),
           NavigationDestination(
             icon: Icon(Icons.pin_drop_outlined),

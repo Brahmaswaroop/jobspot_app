@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:jobspot_app/core/theme/app_theme.dart';
 
 class MapTab extends StatefulWidget {
   const MapTab({super.key});
@@ -52,6 +53,7 @@ class _MapTabState extends State<MapTab> {
         backgroundColor: Colors.transparent,
         elevation: 0,
         centerTitle: true,
+        foregroundColor: AppColors.black,
       ),
       // Use a Stack to overlay other UI elements (like a search bar) on the map later
       body: GoogleMap(

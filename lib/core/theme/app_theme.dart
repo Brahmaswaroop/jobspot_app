@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class AppColors {
-  static const Color purple = Color(0xFF6A1B9A);
+  static const Color purple = Color(0xFF6C63FF);
   static const Color orange = Color(0xFFFF8F00);
   static const Color grey = Color(0xFFF0F0F0);
   static const Color white = Color(0xFFFFFFFF);

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:jobspot_app/core/theme/app_theme.dart';
 import 'package:jobspot_app/features/dashboard/presentation/widgets/stat_card.dart';
 import 'package:jobspot_app/features/dashboard/presentation/widgets/job_card.dart';
 
@@ -7,8 +8,9 @@ class HomeTab extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final textTheme = Theme.of(context).textTheme;
+
     return Scaffold(
-      backgroundColor: Colors.grey[50],
       body: SafeArea(
         child: SingleChildScrollView(
           padding: const EdgeInsets.all(20),
@@ -24,27 +26,23 @@ class HomeTab extends StatelessWidget {
                     children: [
                       Text(
                         'Welcome back!',
-                        style: TextStyle(fontSize: 16, color: Colors.grey[600]),
+                        style: textTheme.bodyMedium?.copyWith(color: Colors.grey[600]),
                       ),
                       const SizedBox(height: 4),
-                      const Text(
+                      Text(
                         'John Doe',
-                        style: TextStyle(
-                          fontSize: 24,
-                          fontWeight: FontWeight.bold,
-                          color: Color(0xFF2D2D2D),
-                        ),
+                        style: textTheme.headlineMedium,
                       ),
                     ],
                   ),
                   Container(
                     padding: const EdgeInsets.all(8),
                     decoration: BoxDecoration(
-                      color: Colors.white,
+                      color: AppColors.white,
                       borderRadius: BorderRadius.circular(12),
                       boxShadow: [
                         BoxShadow(
-                          color: Colors.black.withValues(alpha: 0.5),
+                          color: AppColors.black.withValues(alpha: 0.5),
                           blurRadius: 10,
                         ),
                       ],
@@ -62,7 +60,7 @@ class HomeTab extends StatelessWidget {
                       title: 'Applied',
                       count: '24',
                       icon: Icons.send,
-                      color: Color(0xFF6C63FF),
+                      color: AppColors.purple,
                     ),
                   ),
                   SizedBox(width: 12),
@@ -71,7 +69,7 @@ class HomeTab extends StatelessWidget {
                       title: 'Interviews',
                       count: '8',
                       icon: Icons.videocam,
-                      color: Color(0xFFFF6B35),
+                      color: AppColors.orange,
                     ),
                   ),
                   SizedBox(width: 12),
@@ -89,13 +87,9 @@ class HomeTab extends StatelessWidget {
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  const Text(
+                  Text(
                     'Saved Jobs',
-                    style: TextStyle(
-                      fontSize: 20,
-                      fontWeight: FontWeight.bold,
-                      color: Color(0xFF2D2D2D),
-                    ),
+                    style: textTheme.headlineMedium,
                   ),
                   TextButton(onPressed: () {}, child: const Text('See all')),
                 ],
@@ -109,7 +103,7 @@ class HomeTab extends StatelessWidget {
                 salary: '\$120k - \$150k',
                 type: 'Full Time',
                 logo: Icons.g_mobiledata,
-                logoColor: Color(0xFF6C63FF),
+                logoColor: AppColors.purple,
               ),
               const SizedBox(height: 12),
               const JobCard(
@@ -119,7 +113,7 @@ class HomeTab extends StatelessWidget {
                 salary: '\$140k - \$180k',
                 type: 'Full Time',
                 logo: Icons.apple,
-                logoColor: Color(0xFFFF6B35),
+                logoColor: AppColors.orange,
               ),
               const SizedBox(height: 12),
               const JobCard(
@@ -129,19 +123,15 @@ class HomeTab extends StatelessWidget {
                 salary: '\$110k - \$145k',
                 type: 'Remote',
                 logo: Icons.business,
-                logoColor: Color(0xFF6C63FF),
+                logoColor: AppColors.purple,
               ),
               const SizedBox(height: 12),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  const Text(
+                  Text(
                     'Recommended Jobs',
-                    style: TextStyle(
-                      fontSize: 20,
-                      fontWeight: FontWeight.bold,
-                      color: Color(0xFF2D2D2D),
-                    ),
+                    style: textTheme.headlineMedium,
                   ),
                   TextButton(onPressed: () {}, child: const Text('See all')),
                 ],
@@ -151,7 +141,7 @@ class HomeTab extends StatelessWidget {
               SingleChildScrollView(
                 scrollDirection: Axis.horizontal,
                 child: Row(
-                  children: [
+                  children: const [
                     SizedBox(
                       width: 320, // Constrain the width of the JobCard
                       child: JobCard(
@@ -161,7 +151,7 @@ class HomeTab extends StatelessWidget {
                         salary: '\$120k - \$150k',
                         type: 'Full Time',
                         logo: Icons.g_mobiledata,
-                        logoColor: Color(0xFF6C63FF),
+                        logoColor: AppColors.purple,
                       ),
                     ),
                     SizedBox(width: 12),
@@ -174,7 +164,7 @@ class HomeTab extends StatelessWidget {
                         salary: '\$140k - \$180k',
                         type: 'Full Time',
                         logo: Icons.apple,
-                        logoColor: Color(0xFFFF6B35),
+                        logoColor: AppColors.orange,
                       ),
                     ),
                     SizedBox(width: 12),
@@ -187,7 +177,7 @@ class HomeTab extends StatelessWidget {
                         salary: '\$110k - \$145k',
                         type: 'Remote',
                         logo: Icons.business,
-                        logoColor: Color(0xFF6C63FF),
+                        logoColor: AppColors.purple,
                       ),
                     ),
                   ],

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:jobspot_app/core/theme/app_theme.dart';
 
 class JobCard extends StatefulWidget {
   final String company;
@@ -28,10 +29,12 @@ class _JobCardState extends State<JobCard> {
 
   @override
   Widget build(BuildContext context) {
+    final textTheme = Theme.of(context).textTheme;
+
     return Container(
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: AppColors.white,
         borderRadius: BorderRadius.circular(16),
         boxShadow: [
           BoxShadow(color: Colors.black.withValues(alpha: 0.05), blurRadius: 10),
@@ -57,16 +60,12 @@ class _JobCardState extends State<JobCard> {
                   children: [
                     Text(
                       widget.company,
-                      style: TextStyle(fontSize: 14, color: Colors.grey[600]),
+                      style: textTheme.bodyMedium?.copyWith(color: Colors.grey[600]),
                     ),
                     const SizedBox(height: 4),
                     Text(
                       widget.position,
-                      style: const TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.w600,
-                        color: Color(0xFF2D2D2D),
-                      ),
+                      style: textTheme.bodyLarge?.copyWith(fontWeight: FontWeight.w600),
                     ),
                   ],
                 ),
@@ -74,7 +73,7 @@ class _JobCardState extends State<JobCard> {
               IconButton(
                 icon: Icon(
                   _isBookmarked ? Icons.bookmark : Icons.bookmark_outline,
-                  color: _isBookmarked ? Colors.orange : null,
+                  color: _isBookmarked ? AppColors.orange : null,
                 ),
                 onPressed: () {
                   setState(() {
@@ -90,19 +89,19 @@ class _JobCardState extends State<JobCard> {
               Icon(
                 Icons.location_on_outlined,
                 size: 16,
-                color: Colors.grey[600],
+                color: AppColors.grey,
               ),
               const SizedBox(width: 4),
               Text(
                 widget.location,
-                style: TextStyle(fontSize: 14, color: Colors.grey[600]),
+                style: textTheme.bodyMedium?.copyWith(color: AppColors.grey),
               ),
               const SizedBox(width: 16),
-              Icon(Icons.access_time, size: 16, color: Colors.grey[600]),
+              Icon(Icons.access_time, size: 16, color: AppColors.grey),
               const SizedBox(width: 4),
               Text(
                 widget.type,
-                style: TextStyle(fontSize: 14, color: Colors.grey[600]),
+                style: textTheme.bodyMedium?.copyWith(color: AppColors.grey),
               ),
             ],
           ),
@@ -112,23 +111,19 @@ class _JobCardState extends State<JobCard> {
             children: [
               Text(
                 widget.salary,
-                style: const TextStyle(
-                  fontSize: 16,
+                style: textTheme.bodyLarge?.copyWith(
                   fontWeight: FontWeight.bold,
-                  color: Color(0xFF6C63FF),
+                  color: AppColors.purple,
                 ),
               ),
               ElevatedButton(
                 onPressed: () {},
                 style: ElevatedButton.styleFrom(
-                  backgroundColor: const Color(0xFF6C63FF),
-                  foregroundColor: Colors.white,
+                  backgroundColor: AppColors.purple,
+                  foregroundColor: AppColors.white,
                   padding:
                   const EdgeInsets.symmetric(horizontal: 24, vertical: 8),
-                  textStyle: const TextStyle(
-                    fontSize: 14,
-                    fontWeight: FontWeight.w500,
-                  ),
+                  textStyle: textTheme.bodyMedium?.copyWith(fontWeight: FontWeight.w500),
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(8),
                   ),

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:jobspot_app/core/theme/app_theme.dart';
 import 'package:jobspot_app/features/dashboard/presentation/widgets/job_card.dart';
 
-// --- A model for our job data for easier management ---
 class Job {
   final String company;
   final String position;
@@ -32,9 +32,9 @@ class SearchTab extends StatefulWidget {
 class _SearchTabState extends State<SearchTab> {
   // --- Master list of all available jobs (in a real app, this would come from an API) ---
   final List<Job> _allJobs = [
-    Job(company: 'Google Inc.', position: 'Senior UI/UX Designer', location: 'California, USA', salary: '\$120k - \$150k', type: 'Full Time', logo: Icons.g_mobiledata, logoColor: const Color(0xFF6C63FF)),
-    Job(company: 'Apple Inc.', position: 'Product Manager', location: 'New York, USA', salary: '\$140k - \$180k', type: 'Full Time', logo: Icons.apple, logoColor: const Color(0xFFFF6B35)),
-    Job(company: 'Microsoft', position: 'Software Engineer', location: 'Seattle, USA', salary: '\$110k - \$145k', type: 'Remote', logo: Icons.business, logoColor: const Color(0xFF6C63FF)),
+    Job(company: 'Google Inc.', position: 'Senior UI/UX Designer', location: 'California, USA', salary: '\$120k - \$150k', type: 'Full Time', logo: Icons.g_mobiledata, logoColor: AppColors.purple),
+    Job(company: 'Apple Inc.', position: 'Product Manager', location: 'New York, USA', salary: '\$140k - \$180k', type: 'Full Time', logo: Icons.apple, logoColor: AppColors.orange),
+    Job(company: 'Microsoft', position: 'Software Engineer', location: 'Seattle, USA', salary: '\$110k - \$145k', type: 'Remote', logo: Icons.business, logoColor: AppColors.purple),
     Job(company: 'Facebook', position: 'Data Scientist', location: 'Austin, USA', salary: '\$135k - \$160k', type: 'Contract', logo: Icons.facebook, logoColor: const Color(0xFF1877F2)),
     Job(company: 'Netflix', position: 'Flutter Developer', location: 'Los Gatos, USA', salary: '\$115k - \$155k', type: 'Part Time', logo: Icons.movie_filter, logoColor: const Color(0xFFE50914)),
   ];
@@ -105,10 +105,10 @@ class _SearchTabState extends State<SearchTab> {
                           _filterJobs();
                           Navigator.pop(context);
                         },
-                        backgroundColor: Colors.white,
-                        selectedColor: const Color(0xFF6C63FF),
+                        backgroundColor: AppColors.white,
+                        selectedColor: AppColors.purple,
                         labelStyle: TextStyle(
-                          color: isSelected ? Colors.white : Colors.black,
+                          color: isSelected ? AppColors.white : AppColors.black,
                         ),
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(8),
@@ -131,13 +131,13 @@ class _SearchTabState extends State<SearchTab> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.grey[100],
+      backgroundColor: AppColors.grey,
       appBar: AppBar(
         title: const Text('Find Your Dream Job'),
         centerTitle: true,
         backgroundColor: Colors.transparent,
         elevation: 0,
-        foregroundColor: Colors.black,
+        foregroundColor: AppColors.black,
       ),
       body: SafeArea(
         child: SingleChildScrollView(
@@ -151,7 +151,7 @@ class _SearchTabState extends State<SearchTab> {
                   hintText: 'Search for position, company...',
                   prefixIcon: const Icon(Icons.search, color: Colors.grey),
                   filled: true,
-                  fillColor: Colors.white,
+                  fillColor: AppColors.white,
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(12),
                     borderSide: BorderSide.none,
@@ -172,7 +172,7 @@ class _SearchTabState extends State<SearchTab> {
                       onPressed: _openFilterOptions, // This now opens the popup
                       avatar: const Icon(Icons.filter_list, size: 18),
                       label: const Text('Filter'),
-                      backgroundColor: Colors.white,
+                      backgroundColor: AppColors.white,
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(8),
                         side: BorderSide(color: Colors.grey.shade300),
@@ -187,7 +187,7 @@ class _SearchTabState extends State<SearchTab> {
                       },
                       avatar: const Icon(Icons.sort, size: 18),
                       label: const Text('Sort'),
-                      backgroundColor: Colors.white,
+                      backgroundColor: AppColors.white,
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(8),
                         side: BorderSide(color: Colors.grey.shade300),
@@ -200,8 +200,8 @@ class _SearchTabState extends State<SearchTab> {
                         padding: const EdgeInsets.only(left: 8.0),
                         child: Chip(
                           label: Text(_selectedJobType!),
-                          labelStyle: const TextStyle(color: Colors.white),
-                          backgroundColor: const Color(0xFF6C63FF),
+                          labelStyle: const TextStyle(color: AppColors.white),
+                          backgroundColor: AppColors.purple,
                           onDeleted: () {
                             // Clear the filter and update the job list
                             _selectedJobType = null;
@@ -221,11 +221,11 @@ class _SearchTabState extends State<SearchTab> {
                 children: [
                   Text(
                     '${_displayedJobs.length} Jobs Found',
-                    style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
+                    style: Theme.of(context).textTheme.bodyLarge,
                   ),
-                  const Text(
+                  Text(
                     'Sort by: Newest',
-                    style: TextStyle(fontSize: 14, color: Colors.grey),
+                    style: Theme.of(context).textTheme.bodyMedium?.copyWith(color: Colors.grey),
                   ),
                 ],
               ),
