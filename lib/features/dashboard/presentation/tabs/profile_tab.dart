@@ -54,7 +54,7 @@ class ProfileTab extends StatelessWidget {
                     const SizedBox(height: 4),
                     Text(
                       'john.doe@example.com',
-                      style: textTheme.bodyLarge?.copyWith(color: Colors.white.withOpacity(0.9)),
+                      style: textTheme.bodyLarge?.copyWith(color: Colors.white.withValues(alpha: 0.9)),
                     ),
                     const SizedBox(height: 16),
                     // Edit Profile Button

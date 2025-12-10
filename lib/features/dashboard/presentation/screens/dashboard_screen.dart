@@ -39,7 +39,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
           });
         },
         backgroundColor: AppColors.white,
-        indicatorColor: AppColors.purple.withOpacity(0.15),
+        indicatorColor: AppColors.purple.withValues(alpha: 0.15),
         labelBehavior: NavigationDestinationLabelBehavior.onlyShowSelected,
         height: 70,
         destinations: const [
