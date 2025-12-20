@@ -71,9 +71,11 @@ class _MapTabState extends State<MapTab> {
   ];
 
   Set<Marker> _markers = {};
+
   // NEW: Icons for selected and unselected states
   BitmapDescriptor? _selectedMarkerIcon;
   BitmapDescriptor? _unselectedMarkerIcon;
+
   // NEW: Keep track of the selected marker
   String? _selectedJobCompany;
 
@@ -89,11 +91,11 @@ class _MapTabState extends State<MapTab> {
     // Selected icon is map_icon_1.png, unselected is map_icon_2.png
     final Uint8List selectedIconBytes = await getBytesFromAsset(
       'assets/icons/map_icon_1.png',
-      64,
+      72,
     );
     final Uint8List unselectedIconBytes = await getBytesFromAsset(
       'assets/icons/map_icon_2.png',
-      72,
+      64,
     );
 
     if (mounted) {
@@ -139,13 +141,21 @@ class _MapTabState extends State<MapTab> {
               if (mounted) {
                 setState(() {
                   _selectedJobCompany = null;
-                  _buildMarkers();
+                  _buildMarkers(); // Re-build to reset the marker icon
                 });
               }
             });
           },
         ),
         onTap: () {
+          // Animate camera to the selected marker's position
+          mapController.animateCamera(
+            CameraUpdate.newLatLngZoom(
+              LatLng(job.latitude, job.longitude),
+              14, // A reasonable zoom level
+            ),
+          );
+
           setState(() {
             _selectedJobCompany = job.company;
             _buildMarkers(); // Re-build markers to update icons immediately
@@ -164,6 +174,8 @@ class _MapTabState extends State<MapTab> {
 
   void _onMapCreated(GoogleMapController controller) {
     mapController = controller;
+    // Build markers after the map is created
+    _buildMarkers();
   }
 
   // --- Show Job Details in a Bottom Sheet ---
@@ -212,81 +224,76 @@ class _MapTabState extends State<MapTab> {
           ),
 
           // --- Search Bar ---
-          Positioned(
-            top: 60,
-            left: 16,
-            right: 16,
-            child: Container(
-              clipBehavior: Clip.hardEdge,
-              decoration: BoxDecoration(
-                color: AppColors.white,
-                borderRadius: BorderRadius.circular(12),
-                boxShadow: [
-                  BoxShadow(
-                    color: Colors.black.withValues(
-                      alpha: 0.1,
-                    ), // Using withOpacity is slightly cleaner
-                    blurRadius: 8,
-                    offset: const Offset(0, 2),
+          Padding(
+            padding: const EdgeInsets.only(top: 32, right: 16, left: 16),
+            child: Column(
+              spacing: 8,
+              children: [
+                Container(
+                  clipBehavior: Clip.hardEdge,
+                  decoration: BoxDecoration(
+                    color: AppColors.white,
+                    borderRadius: BorderRadius.circular(32),
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.black.withValues(alpha: 0.1),
+                        blurRadius: 8,
+                        offset: const Offset(0, 2),
+                      ),
+                    ],
                   ),
-                ],
-              ),
-              child: const TextField(
-                decoration: InputDecoration(
-                  enabledBorder: InputBorder.none,
-                  focusedBorder: InputBorder.none,
-                  hintText: 'Search for position, company...',
-                  prefixIcon: Icon(Icons.search, color: Colors.grey),
-                  contentPadding: EdgeInsets.symmetric(
-                    vertical: 16,
-                    horizontal: 20,
+                  child: const TextField(
+                    decoration: InputDecoration(
+                      enabledBorder: InputBorder.none,
+                      focusedBorder: InputBorder.none,
+                      hintText: 'Search for position, company...',
+                      prefixIcon: Icon(Icons.search, color: Colors.grey),
+                      contentPadding: EdgeInsets.symmetric(
+                        vertical: 16,
+                        horizontal: 20,
+                      ),
+                    ),
                   ),
                 ),
-              ),
-            ),
-          ),
 
-          // --- Filter Chips ---
-          Positioned(
-            top: 126,
-            left: 16,
-            right: 16,
-            child: SizedBox(
-              height: 36,
-              child: ListView(
-                scrollDirection: Axis.horizontal,
-                children: [
-                  ActionChip(
-                    onPressed: () {},
-                    avatar: const Icon(
-                      Icons.filter_list,
-                      size: 18,
-                      color: AppColors.black,
-                    ),
-                    label: const Text('Filter'),
-                    backgroundColor: AppColors.white,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(16),
-                      side: BorderSide(color: Colors.grey.shade300),
-                    ),
+                SizedBox(
+                  height: 36,
+                  child: ListView(
+                    scrollDirection: Axis.horizontal,
+                    children: [
+                      ActionChip(
+                        onPressed: () {},
+                        avatar: const Icon(
+                          Icons.filter_list,
+                          size: 18,
+                          color: AppColors.black,
+                        ),
+                        label: const Text('Filter'),
+                        backgroundColor: AppColors.white,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(16),
+                          side: BorderSide(color: Colors.grey.shade300),
+                        ),
+                      ),
+                      const SizedBox(width: 8),
+                      ActionChip(
+                        onPressed: () {},
+                        avatar: const Icon(
+                          Icons.sort,
+                          size: 18,
+                          color: AppColors.black,
+                        ),
+                        label: const Text('Sort'),
+                        backgroundColor: AppColors.white,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(16),
+                          side: BorderSide(color: Colors.grey.shade300),
+                        ),
+                      ),
+                    ],
                   ),
-                  const SizedBox(width: 8),
-                  ActionChip(
-                    onPressed: () {},
-                    avatar: const Icon(
-                      Icons.sort,
-                      size: 18,
-                      color: AppColors.black,
-                    ),
-                    label: const Text('Sort'),
-                    backgroundColor: AppColors.white,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(16),
-                      side: BorderSide(color: Colors.grey.shade300),
-                    ),
-                  ),
-                ],
-              ),
+                ),
+              ],
             ),
           ),
         ],
@@ -295,7 +302,6 @@ class _MapTabState extends State<MapTab> {
   }
 }
 
-// --- Custom Widget for the Job Details Bottom Sheet ---
 class JobDetailsSheet extends StatelessWidget {
   final Job job;
   final ScrollController scrollController;

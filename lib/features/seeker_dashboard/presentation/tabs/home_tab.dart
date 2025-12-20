@@ -27,13 +27,12 @@ class HomeTab extends StatelessWidget {
                     children: [
                       Text(
                         'Welcome back!',
-                        style: textTheme.bodyMedium?.copyWith(color: Colors.grey[600]),
+                        style: textTheme.bodyMedium?.copyWith(
+                          color: Colors.grey[600],
+                        ),
                       ),
                       const SizedBox(height: 4),
-                      Text(
-                        'John Doe',
-                        style: textTheme.headlineMedium,
-                      ),
+                      Text('John Doe', style: textTheme.headlineLarge),
                     ],
                   ),
                   Container(
@@ -88,10 +87,7 @@ class HomeTab extends StatelessWidget {
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Text(
-                    'Saved Jobs',
-                    style: textTheme.headlineMedium,
-                  ),
+                  Text('Saved Jobs', style: textTheme.headlineMedium),
                   TextButton(onPressed: () {}, child: const Text('See all')),
                 ],
               ),
@@ -130,10 +126,7 @@ class HomeTab extends StatelessWidget {
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Text(
-                    'Recommended Jobs',
-                    style: textTheme.headlineMedium,
-                  ),
+                  Text('Recommended Jobs', style: textTheme.headlineMedium),
                   TextButton(onPressed: () {}, child: const Text('See all')),
                 ],
               ),

@@ -78,21 +78,15 @@ class AppTheme {
         headlineLarge: GoogleFonts.poppins(
           fontSize: 24,
           fontWeight: FontWeight.bold,
-          color: AppColors.orange,
+          color: AppColors.darkPurple,
         ),
         headlineMedium: GoogleFonts.poppins(
           fontSize: 20,
           fontWeight: FontWeight.w600,
           color: AppColors.black,
         ),
-        bodyLarge: GoogleFonts.poppins(
-          fontSize: 16,
-          color: AppColors.black,
-        ),
-        bodyMedium: GoogleFonts.poppins(
-          fontSize: 14,
-          color: AppColors.black,
-        ),
+        bodyLarge: GoogleFonts.poppins(fontSize: 16, color: AppColors.black),
+        bodyMedium: GoogleFonts.poppins(fontSize: 14, color: AppColors.black),
       ),
     );
   }
@@ -158,28 +152,29 @@ class AppTheme {
       ),
       textTheme: GoogleFonts.poppinsTextTheme(ThemeData.dark().textTheme)
           .copyWith(
-        headlineLarge: GoogleFonts.poppins(
-          fontSize: 24,
-          fontWeight: FontWeight.bold,
-          color: AppColors.orange,
-        ),
-        headlineMedium: GoogleFonts.poppins(
-          fontSize: 20,
-          fontWeight: FontWeight.w600,
-          color: AppColors.darkText,
-        ),
-        bodyLarge: GoogleFonts.poppins(
-          fontSize: 16,
-          color: AppColors.darkText,
-        ),
-        bodyMedium: GoogleFonts.poppins(
-          fontSize: 14,
-          color: AppColors.darkText,
-        ),
-      ),
+            headlineLarge: GoogleFonts.poppins(
+              fontSize: 24,
+              fontWeight: FontWeight.bold,
+              color: AppColors.orange,
+            ),
+            headlineMedium: GoogleFonts.poppins(
+              fontSize: 20,
+              fontWeight: FontWeight.w600,
+              color: AppColors.darkText,
+            ),
+            bodyLarge: GoogleFonts.poppins(
+              fontSize: 16,
+              color: AppColors.darkText,
+            ),
+            bodyMedium: GoogleFonts.poppins(
+              fontSize: 14,
+              color: AppColors.darkText,
+            ),
+          ),
     );
   }
 }
+
 class ThemeNotifier extends ChangeNotifier {
   ThemeMode _themeMode = ThemeMode.system;
 
