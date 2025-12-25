@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:jobspot_app/core/theme/app_theme.dart';
+import 'package:jobspot_app/features/admin_dashboard/presentation/screens/admin_dashboard_screen.dart';
 import 'package:jobspot_app/features/auth/presentation/screens/role_selection_screen.dart';
 import 'package:jobspot_app/features/auth/presentation/widgets/social_button.dart';
+
+import 'package:jobspot_app/features/seeker_dashboard/presentation/seeker_dashboard_screen.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
-import '../../../admin_dashboard/presentation/screens/admin_dashboard_screen.dart';
+import '../../../employer_dashboard/presentation/employer_dashboard_screen.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -35,7 +37,6 @@ class _LoginScreenState extends State<LoginScreen> {
           email: _emailController.text.trim(),
           password: _passwordController.text,
         );
-        // Navigation is handled by RootPage's auth listener in main.dart
       } on AuthException catch (e) {
         if (mounted) {
           ScaffoldMessenger.of(context).showSnackBar(
@@ -55,13 +56,6 @@ class _LoginScreenState extends State<LoginScreen> {
         if (mounted) setState(() => _isLoading = false);
       }
     }
-  }
-
-  Future<void> _handleSocialLogin(String provider) async {
-    // Placeholder for social login. RootPage will handle redirection.
-    ScaffoldMessenger.of(
-      context,
-    ).showSnackBar(SnackBar(content: Text('Connecting to $provider...')));
   }
 
   @override
@@ -91,12 +85,12 @@ class _LoginScreenState extends State<LoginScreen> {
                   child: const Icon(Icons.work, size: 40, color: Colors.white),
                 ),
                 const SizedBox(height: 24),
-                // Welcome Text
-                Text(
+                const Text(
                   'Welcome Back!',
-                  style: Theme.of(context).textTheme.displaySmall?.copyWith(
+                  style: TextStyle(
+                    fontSize: 32,
                     fontWeight: FontWeight.bold,
-                    color: AppColors.black,
+                    color: Color(0xFF2D2D2D),
                   ),
                 ),
                 const SizedBox(height: 8),
@@ -166,31 +160,11 @@ class _LoginScreenState extends State<LoginScreen> {
                 const SizedBox(height: 24),
                 // Login Button
                 ElevatedButton(
-                  onPressed: _isLoading ? null : _handleLogin,
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: AppColors.orange,
-                    padding: const EdgeInsets.symmetric(vertical: 16),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(12),
-                    ),
+                  onPressed: _handleLogin,
+                  child: const Text(
+                    'Login',
+                    style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
                   ),
-                  child: _isLoading
-                      ? const SizedBox(
-                          height: 20,
-                          width: 20,
-                          child: CircularProgressIndicator(
-                            color: Colors.white,
-                            strokeWidth: 2,
-                          ),
-                        )
-                      : const Text(
-                          'Login',
-                          style: TextStyle(
-                            fontSize: 16,
-                            fontWeight: FontWeight.bold,
-                            color: Colors.white,
-                          ),
-                        ),
                 ),
                 const SizedBox(height: 24),
                 // Divider
@@ -215,7 +189,15 @@ class _LoginScreenState extends State<LoginScreen> {
                       child: SocialButton(
                         icon: Icons.g_mobiledata,
                         label: 'Google',
-                        onPressed: () => _handleSocialLogin('Google'),
+                        onPressed: () {
+                          Navigator.pushReplacement(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) =>
+                                  const SeekerDashboardScreen(),
+                            ),
+                          );
+                        },
                       ),
                     ),
                     const SizedBox(width: 12),
@@ -223,7 +205,15 @@ class _LoginScreenState extends State<LoginScreen> {
                       child: SocialButton(
                         icon: Icons.apple,
                         label: 'Apple',
-                        onPressed: () => _handleSocialLogin('Apple'),
+                        onPressed: () {
+                          Navigator.pushReplacement(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) =>
+                                  const EmployerDashboardScreen(),
+                            ),
+                          );
+                        },
                       ),
                     ),
                   ],
@@ -269,10 +259,7 @@ class _LoginScreenState extends State<LoginScreen> {
                       },
                       child: const Text(
                         'Sign Up',
-                        style: TextStyle(
-                          fontWeight: FontWeight.bold,
-                          color: AppColors.purple,
-                        ),
+                        style: TextStyle(fontWeight: FontWeight.w600),
                       ),
                     ),
                   ],

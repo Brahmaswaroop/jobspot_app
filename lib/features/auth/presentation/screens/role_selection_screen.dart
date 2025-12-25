@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:jobspot_app/core/theme/app_theme.dart';
 import 'package:jobspot_app/features/auth/presentation/screens/signup_screen.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
 
 class RoleSelectionScreen extends StatefulWidget {
   const RoleSelectionScreen({super.key});
@@ -23,7 +24,14 @@ class _RoleSelectionScreenState extends State<RoleSelectionScreen> {
         elevation: 0,
         leading: IconButton(
           icon: const Icon(Icons.arrow_back, color: Colors.black),
-          onPressed: () => Navigator.pop(context),
+          onPressed: () async {
+            // Check if there's an active session (e.g. user just registered via social)
+            if (Supabase.instance.client.auth.currentUser != null) {
+              await Supabase.instance.client.auth.signOut();
+            } else {
+              Navigator.pop(context);
+            }
+          },
         ),
       ),
       body: SafeArea(

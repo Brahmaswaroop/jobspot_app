@@ -6,7 +6,7 @@ import 'package:jobspot_app/features/admin_dashboard/presentation/screens/admin_
 import '../../features/seeker_dashboard/presentation/seeker_dashboard_screen.dart';
 
 class DashboardRouter extends StatelessWidget {
-  final UserRole role;
+  final UserRole? role;
 
   const DashboardRouter({super.key, required this.role});
 
@@ -19,6 +19,9 @@ class DashboardRouter extends StatelessWidget {
         return const EmployerDashboardScreen();
       case UserRole.admin:
         return const AdminDashboardScreen();
+      case null:
+        // TODO: Handle this case.
+        throw UnimplementedError();
     }
   }
 }

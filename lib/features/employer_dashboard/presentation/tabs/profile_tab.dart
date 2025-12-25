@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:jobspot_app/core/theme/app_theme.dart';
+import 'package:jobspot_app/core/utils/supabase_service.dart';
 
 class ProfileTab extends StatelessWidget {
   const ProfileTab({super.key});
@@ -99,8 +100,15 @@ class ProfileTab extends StatelessWidget {
               SizedBox(
                 width: double.infinity,
                 child: OutlinedButton.icon(
-                  onPressed: () {
-                    // TODO: Implement logout logic with Supabase
+                  onPressed: () async {
+                    final messenger = ScaffoldMessenger.of(context);
+                    try {
+                      await SupabaseService.signOut();
+                    } catch (e) {
+                      messenger.showSnackBar(
+                        SnackBar(content: Text('Error signing out: $e')),
+                      );
+                    }
                   },
                   icon: const Icon(Icons.logout, color: Colors.red),
                   label: const Text(
