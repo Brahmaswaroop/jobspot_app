@@ -19,7 +19,6 @@ class JobPostingTab extends StatelessWidget {
     final textTheme = Theme.of(context).textTheme;
 
     return Scaffold(
-      backgroundColor: AppColors.whiteBackground,
       floatingActionButton: FloatingActionButton(
         onPressed: () => _showCreateJobDialog(context),
         backgroundColor: AppColors.darkPurple,
@@ -41,7 +40,7 @@ class JobPostingTab extends StatelessWidget {
                       Text(
                         'Manage your',
                         style: textTheme.bodyMedium?.copyWith(
-                          color: Colors.grey[600],
+                          color: Theme.of(context).hintColor,
                         ),
                       ),
                       const SizedBox(height: 4),
@@ -51,7 +50,7 @@ class JobPostingTab extends StatelessWidget {
                   Container(
                     padding: const EdgeInsets.all(8),
                     decoration: BoxDecoration(
-                      color: AppColors.white,
+                      color: Theme.of(context).cardColor,
                       borderRadius: BorderRadius.circular(12),
                       boxShadow: [
                         BoxShadow(

@@ -3,14 +3,15 @@ import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:jobspot_app/core/constants/user_role.dart';
 import 'package:jobspot_app/core/routes/dashboard_router.dart';
+import 'package:jobspot_app/core/theme/app_theme.dart';
+import 'package:jobspot_app/features/auth/presentation/screens/login_screen.dart';
 import 'package:jobspot_app/features/auth/presentation/screens/role_selection_screen.dart';
 import 'package:jobspot_app/features/auth/presentation/screens/unable_account_page.dart';
+import 'package:provider/provider.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
-import 'package:jobspot_app/features/auth/presentation/screens/login_screen.dart';
-import 'package:jobspot_app/core/theme/app_theme.dart';
-
 final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
+final supabase = Supabase.instance.client;
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -19,7 +20,12 @@ void main() async {
     url: dotenv.env['SUPABASE_URL']!,
     anonKey: dotenv.env['SUPABASE_ANON_KEY']!,
   );
-  runApp(const JobSpotApp());
+  runApp(
+    ChangeNotifierProvider(
+      create: (_) => ThemeNotifier(),
+      child: const JobSpotApp(),
+    ),
+  );
 }
 
 class JobSpotApp extends StatelessWidget {
@@ -27,17 +33,21 @@ class JobSpotApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'JobSpot',
-      navigatorKey: navigatorKey,
-      debugShowCheckedModeBanner: false,
-      theme: AppTheme.lightTheme,
-      home: const RootPage(),
+    return Consumer<ThemeNotifier>(
+      builder: (context, themeNotifier, child) {
+        return MaterialApp(
+          title: 'JobSpot',
+          navigatorKey: navigatorKey,
+          debugShowCheckedModeBanner: false,
+          theme: AppTheme.lightTheme,
+          darkTheme: AppTheme.darkTheme,
+          themeMode: themeNotifier.themeMode,
+          home: const RootPage(),
+        );
+      },
     );
   }
 }
-
-final supabase = Supabase.instance.client;
 
 class RootPage extends StatefulWidget {
   const RootPage({super.key});
@@ -49,17 +59,17 @@ class RootPage extends StatefulWidget {
 class _RootPageState extends State<RootPage> {
   bool _loading = true;
   Widget? _home;
-  StreamSubscription<AuthState>? _authStateSubscription;
+  StreamSubscription<AuthState>? _authSub;
 
   @override
   void initState() {
     super.initState();
-    _initAuth();
+    Future.microtask(_initAuth);
   }
 
   @override
   void dispose() {
-    _authStateSubscription?.cancel();
+    _authSub?.cancel();
     super.dispose();
   }
 
@@ -70,63 +80,57 @@ class _RootPageState extends State<RootPage> {
       _updateHome(const LoginScreen());
     }
 
-    _authStateSubscription = supabase.auth.onAuthStateChange.listen(
-      (data) {
-        final user = data.session?.user;
-        if (user != null) {
-          _handleAuthStateChange(user);
-        } else {
-          _updateHome(const LoginScreen());
-        }
-      },
-      onError: (_) {
+    _authSub = supabase.auth.onAuthStateChange.listen((event) {
+      final user = event.session?.user;
+      if (user != null) {
+        _handleUser(user);
+      } else {
         _updateHome(const LoginScreen());
-      },
-    );
+      }
+    }, onError: (_) => _updateHome(const LoginScreen()));
   }
 
-  Future<void> _handleAuthStateChange(User user) async {
+  Future<void> _handleUser(User user) async {
     try {
-      final userProfile = await supabase
+      _setLoading();
+
+      final profile = await supabase
           .from('user_profiles')
           .select('role, account_disabled, profile_completed')
           .eq('user_id', user.id)
           .maybeSingle();
 
-      if (userProfile == null) {
+      if (profile == null) {
         _updateHome(const RoleSelectionScreen());
         return;
       }
 
-      final isDisabled = userProfile['account_disabled'] as bool? ?? false;
-      if (isDisabled) {
-        _updateHome(UnableAccountPage(userProfile: userProfile));
+      if (profile['account_disabled'] == true) {
+        _updateHome(UnableAccountPage(userProfile: profile));
         return;
       }
 
-      // final isProfileCompleted =
-      //     userProfile['profile_completed'] as bool? ?? false;
-      final roleStr = userProfile['role'] as String?;
-      final UserRole? role = UserRoleExtension.fromDbValue(roleStr!);
-      //
-      // if (!isProfileCompleted || role == null) {
-      //   _updateHome(const RoleSelectionScreen());
-      // } else {
-      if (navigatorKey.currentState != null &&
-          navigatorKey.currentState!.canPop()) {
-        navigatorKey.currentState!.popUntil((route) => route.isFirst);
-      }
+      final roleStr = profile['role'] as String?;
+      final role = roleStr != null
+          ? UserRoleExtension.fromDbValue(roleStr)
+          : null;
+
       _updateHome(DashboardRouter(role: role));
-      // }
-    } catch (e) {
+    } catch (_) {
       _updateHome(const LoginScreen());
     }
+  }
+
+  void _setLoading() {
+    if (!mounted) return;
+    setState(() {
+      _loading = true;
+    });
   }
 
   void _updateHome(Widget screen) {
     if (!mounted) return;
 
-    // Avoid unnecessary rebuilds if we're already on that screen type
     if (_home?.runtimeType == screen.runtimeType && !_loading) return;
 
     setState(() {

@@ -21,7 +21,7 @@ class ProfileMenuItem extends StatelessWidget {
 
     return Container(
       decoration: BoxDecoration(
-        color: AppColors.white,
+        color: Theme.of(context).cardColor,
         borderRadius: BorderRadius.circular(12),
         boxShadow: [
           BoxShadow(
@@ -51,9 +51,9 @@ class ProfileMenuItem extends StatelessWidget {
         ),
         subtitle: Text(
           subtitle,
-          style: textTheme.bodyMedium?.copyWith(color: Colors.grey[600]),
+          style: textTheme.bodyMedium?.copyWith(color: Theme.of(context).hintColor),
         ),
-        trailing: const Icon(Icons.chevron_right, color: Colors.grey),
+        trailing: Icon(Icons.chevron_right, color: Theme.of(context).hintColor),
       ),
     );
   }

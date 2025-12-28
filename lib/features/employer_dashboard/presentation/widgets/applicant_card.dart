@@ -44,7 +44,7 @@ class ApplicantCard extends StatelessWidget {
       child: Container(
         padding: const EdgeInsets.all(16),
         decoration: BoxDecoration(
-          color: AppColors.white,
+          color: Theme.of(context).cardColor,
           borderRadius: BorderRadius.circular(16),
           boxShadow: [
             BoxShadow(
@@ -88,7 +88,7 @@ class ApplicantCard extends StatelessWidget {
                   Text(
                     jobTitle,
                     style: textTheme.bodyMedium?.copyWith(
-                      color: Colors.grey[600],
+                      color: Theme.of(context).hintColor,
                     ),
                   ),
                   const SizedBox(height: 8),
@@ -116,7 +116,7 @@ class ApplicantCard extends StatelessWidget {
                       Text(
                         'Applied $appliedDate',
                         style: textTheme.bodySmall?.copyWith(
-                          color: Colors.grey[500],
+                          color: Theme.of(context).hintColor,
                         ),
                       ),
                     ],
@@ -124,7 +124,7 @@ class ApplicantCard extends StatelessWidget {
                 ],
               ),
             ),
-            const Icon(Icons.chevron_right, color: Colors.grey),
+            Icon(Icons.chevron_right, color: Theme.of(context).hintColor),
           ],
         ),
       ),

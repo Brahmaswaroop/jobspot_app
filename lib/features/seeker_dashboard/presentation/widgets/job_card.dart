@@ -34,7 +34,7 @@ class _JobCardState extends State<JobCard> {
     return Container(
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
-        color: AppColors.white,
+        color: Theme.of(context).cardColor,
         borderRadius: BorderRadius.circular(16),
         boxShadow: [
           BoxShadow(color: Colors.black.withValues(alpha: 0.05), blurRadius: 10),
@@ -60,7 +60,7 @@ class _JobCardState extends State<JobCard> {
                   children: [
                     Text(
                       widget.company,
-                      style: textTheme.bodyMedium?.copyWith(color: Colors.grey[600]),
+                      style: textTheme.bodyMedium?.copyWith(color: Theme.of(context).hintColor),
                     ),
                     const SizedBox(height: 4),
                     Text(
@@ -89,19 +89,19 @@ class _JobCardState extends State<JobCard> {
               Icon(
                 Icons.location_on_outlined,
                 size: 16,
-                color: AppColors.grey,
+                color: Theme.of(context).hintColor,
               ),
               const SizedBox(width: 4),
               Text(
                 widget.location,
-                style: textTheme.bodyMedium?.copyWith(color: AppColors.grey),
+                style: textTheme.bodyMedium?.copyWith(color: Theme.of(context).hintColor),
               ),
               const SizedBox(width: 16),
-              Icon(Icons.access_time, size: 16, color: AppColors.grey),
+              Icon(Icons.access_time, size: 16, color: Theme.of(context).hintColor),
               const SizedBox(width: 4),
               Text(
                 widget.type,
-                style: textTheme.bodyMedium?.copyWith(color: AppColors.grey),
+                style: textTheme.bodyMedium?.copyWith(color: Theme.of(context).hintColor),
               ),
             ],
           ),

@@ -11,7 +11,6 @@ class HomeTab extends StatelessWidget {
     final textTheme = Theme.of(context).textTheme;
 
     return Scaffold(
-      backgroundColor: AppColors.whiteBackground,
       body: SafeArea(
         child: SingleChildScrollView(
           padding: const EdgeInsets.all(20),
@@ -28,7 +27,7 @@ class HomeTab extends StatelessWidget {
                       Text(
                         'Welcome back!',
                         style: textTheme.bodyMedium?.copyWith(
-                          color: Colors.grey[600],
+                          color: Theme.of(context).hintColor,
                         ),
                       ),
                       const SizedBox(height: 4),
@@ -38,11 +37,11 @@ class HomeTab extends StatelessWidget {
                   Container(
                     padding: const EdgeInsets.all(8),
                     decoration: BoxDecoration(
-                      color: AppColors.white,
+                      color: Theme.of(context).cardColor,
                       borderRadius: BorderRadius.circular(12),
                       boxShadow: [
                         BoxShadow(
-                          color: AppColors.black.withValues(alpha: 0.5),
+                          color: Colors.black.withValues(alpha: 0.05),
                           blurRadius: 10,
                         ),
                       ],

@@ -18,7 +18,6 @@ class _ApplicantsTabState extends State<ApplicantsTab> {
     final textTheme = Theme.of(context).textTheme;
 
     return Scaffold(
-      backgroundColor: AppColors.whiteBackground,
       body: SafeArea(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -30,7 +29,7 @@ class _ApplicantsTabState extends State<ApplicantsTab> {
                 children: [
                   Text(
                     'Review your',
-                    style: textTheme.bodyMedium?.copyWith(color: Colors.grey[600]),
+                    style: textTheme.bodyMedium?.copyWith(color: Theme.of(context).hintColor),
                   ),
                   const SizedBox(height: 4),
                   Text('Applicants', style: textTheme.headlineLarge),
@@ -57,16 +56,16 @@ class _ApplicantsTabState extends State<ApplicantsTab> {
                         _selectedFilter = filter;
                       });
                     },
-                    backgroundColor: AppColors.white,
+                    backgroundColor: Theme.of(context).cardColor,
                     selectedColor: AppColors.purple,
                     labelStyle: TextStyle(
-                      color: isSelected ? AppColors.white : AppColors.black,
+                      color: isSelected ? Colors.white : Theme.of(context).textTheme.bodyLarge?.color,
                       fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
                     ),
-                    checkmarkColor: AppColors.white,
+                    checkmarkColor: Colors.white,
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(20),
-                      side: BorderSide(color: Colors.grey.shade200),
+                      side: BorderSide(color: Colors.grey.withValues(alpha: 0.2)),
                     ),
                   );
                 },

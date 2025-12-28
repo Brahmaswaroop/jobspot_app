@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:jobspot_app/core/theme/app_theme.dart';
 
 class StatCard extends StatelessWidget {
   final String title;
@@ -22,11 +21,11 @@ class StatCard extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.all(20),
       decoration: BoxDecoration(
-        color: AppColors.white,
+        color: Theme.of(context).cardColor,
         borderRadius: BorderRadius.circular(16),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.05),
+            color: Colors.black.withValues(alpha: 0.05),
             blurRadius: 10,
           ),
         ],
@@ -37,7 +36,7 @@ class StatCard extends StatelessWidget {
           Container(
             padding: const EdgeInsets.all(8),
             decoration: BoxDecoration(
-              color: color.withOpacity(0.1),
+              color: color.withValues(alpha: 0.1),
               borderRadius: BorderRadius.circular(8),
             ),
             child: Icon(icon, color: color, size: 20),
@@ -50,7 +49,7 @@ class StatCard extends StatelessWidget {
           const SizedBox(height: 4),
           Text(
             title,
-            style: textTheme.bodyMedium?.copyWith(color: Colors.grey[600]),
+            style: textTheme.bodyMedium?.copyWith(color: Theme.of(context).hintColor),
           ),
         ],
       ),

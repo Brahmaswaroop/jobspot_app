@@ -105,14 +105,14 @@ class _SearchTabState extends State<SearchTab> {
                           _filterJobs();
                           Navigator.pop(context);
                         },
-                        backgroundColor: AppColors.white,
+                        backgroundColor: Theme.of(context).cardColor,
                         selectedColor: AppColors.purple,
                         labelStyle: TextStyle(
-                          color: isSelected ? AppColors.white : AppColors.black,
+                          color: isSelected ? Colors.white : Theme.of(context).textTheme.bodyLarge?.color,
                         ),
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(8),
-                          side: BorderSide(color: Colors.grey.shade300),
+                          side: BorderSide(color: Colors.grey.withValues(alpha: 0.3)),
                         ),
                         showCheckmark: false,
                       );
@@ -131,13 +131,12 @@ class _SearchTabState extends State<SearchTab> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppColors.white,
       appBar: AppBar(
         title: const Text('Find Your Dream Job'),
         centerTitle: true,
         backgroundColor: AppColors.darkPurple,
         elevation: 0,
-        foregroundColor: AppColors.white,
+        foregroundColor: Colors.white,
       ),
       body: SafeArea(
         child: SingleChildScrollView(
@@ -151,7 +150,7 @@ class _SearchTabState extends State<SearchTab> {
                   hintText: 'Search for position, company...',
                   prefixIcon: const Icon(Icons.search, color: Colors.grey),
                   filled: true,
-                  fillColor: AppColors.white,
+                  fillColor: Theme.of(context).cardColor,
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(12),
                     borderSide: BorderSide.none,
@@ -172,10 +171,10 @@ class _SearchTabState extends State<SearchTab> {
                       onPressed: _openFilterOptions, // This now opens the popup
                       avatar: const Icon(Icons.filter_list, size: 18),
                       label: const Text('Filter'),
-                      backgroundColor: AppColors.white,
+                      backgroundColor: Theme.of(context).cardColor,
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(8),
-                        side: BorderSide(color: Colors.grey.shade300),
+                        side: BorderSide(color: Colors.grey.withValues(alpha: 0.3)),
                       ),
                     ),
                     const SizedBox(width: 8),
@@ -187,10 +186,10 @@ class _SearchTabState extends State<SearchTab> {
                       },
                       avatar: const Icon(Icons.sort, size: 18),
                       label: const Text('Sort'),
-                      backgroundColor: AppColors.white,
+                      backgroundColor: Theme.of(context).cardColor,
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(8),
-                        side: BorderSide(color: Colors.grey.shade300),
+                        side: BorderSide(color: Colors.grey.withValues(alpha: 0.3)),
                       ),
                     ),
 
@@ -200,7 +199,7 @@ class _SearchTabState extends State<SearchTab> {
                         padding: const EdgeInsets.only(left: 8.0),
                         child: Chip(
                           label: Text(_selectedJobType!),
-                          labelStyle: const TextStyle(color: AppColors.white),
+                          labelStyle: const TextStyle(color: Colors.white),
                           backgroundColor: AppColors.purple,
                           onDeleted: () {
                             // Clear the filter and update the job list
@@ -225,7 +224,7 @@ class _SearchTabState extends State<SearchTab> {
                   ),
                   Text(
                     'Sort by: Newest',
-                    style: Theme.of(context).textTheme.bodyMedium?.copyWith(color: Colors.grey),
+                    style: Theme.of(context).textTheme.bodyMedium?.copyWith(color: Theme.of(context).hintColor),
                   ),
                 ],
               ),

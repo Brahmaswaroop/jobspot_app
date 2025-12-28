@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:jobspot_app/features/employer_dashboard/presentation/tabs/employer_home_tab.dart';
 import 'package:jobspot_app/features/employer_dashboard/presentation/tabs/job_posting_tab.dart';
 import 'package:jobspot_app/features/employer_dashboard/presentation/tabs/applicants_tab.dart';
-import 'package:jobspot_app/features/employer_dashboard/presentation/tabs/profile_tab.dart';
+import 'package:jobspot_app/features/profile/presentation/profile_tab.dart';
 
 class EmployerDashboardScreen extends StatefulWidget {
   const EmployerDashboardScreen({super.key});
@@ -19,7 +19,7 @@ class _EmployerDashboardScreenState extends State<EmployerDashboardScreen> {
     const EmployerHomeTab(),
     const JobPostingTab(),
     const ApplicantsTab(),
-    const ProfileTab(),
+    const ProfileTab(role: 'employer'),
   ];
 
   @override
@@ -33,6 +33,10 @@ class _EmployerDashboardScreenState extends State<EmployerDashboardScreen> {
             _selectedIndex = index;
           });
         },
+        backgroundColor: Theme.of(context).colorScheme.surface,
+        indicatorColor: Theme.of(context).colorScheme.primary,
+        labelBehavior: NavigationDestinationLabelBehavior.onlyShowSelected,
+
         destinations: const [
           NavigationDestination(
             icon: Icon(Icons.home_outlined),

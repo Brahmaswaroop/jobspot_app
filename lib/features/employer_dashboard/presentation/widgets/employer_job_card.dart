@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:jobspot_app/core/theme/app_theme.dart';
 
 class EmployerJobCard extends StatelessWidget {
   final String company;
@@ -29,15 +28,15 @@ class EmployerJobCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final textTheme = Theme
-        .of(context)
-        .textTheme;
+    final textTheme = Theme.of(context).textTheme;
     final isOpen = status.toLowerCase() == 'open';
+    final cardColor = Theme.of(context).cardColor;
+    final hintColor = Theme.of(context).hintColor;
 
     return Container(
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
-        color: AppColors.white,
+        color: cardColor,
         borderRadius: BorderRadius.circular(16),
         boxShadow: [
           BoxShadow(
@@ -66,21 +65,29 @@ class EmployerJobCard extends StatelessWidget {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(position, style: textTheme.titleMedium?.copyWith(
-                        fontWeight: FontWeight.bold)),
+                    Text(
+                      position,
+                      style: textTheme.titleMedium?.copyWith(
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
                     const SizedBox(height: 4),
-                    Text('$company • $location',
-                        style: textTheme.bodyMedium?.copyWith(
-                            color: Colors.grey[600])),
+                    Text(
+                      '$company • $location',
+                      style: textTheme.bodyMedium?.copyWith(color: hintColor),
+                    ),
                   ],
                 ),
               ),
               Container(
                 padding: const EdgeInsets.symmetric(
-                    horizontal: 10, vertical: 4),
+                  horizontal: 10,
+                  vertical: 4,
+                ),
                 decoration: BoxDecoration(
-                  color: isOpen ? Colors.green.withValues(alpha: 0.1) : Colors
-                      .red.withValues(alpha: 0.1),
+                  color: isOpen
+                      ? Colors.green.withValues(alpha: 0.1)
+                      : Colors.red.withValues(alpha: 0.1),
                   borderRadius: BorderRadius.circular(8),
                 ),
                 child: Text(
@@ -98,16 +105,25 @@ class EmployerJobCard extends StatelessWidget {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Text(salary, style: textTheme.bodyLarge?.copyWith(
-                  fontWeight: FontWeight.w600)),
+              Text(
+                salary,
+                style: textTheme.bodyLarge?.copyWith(
+                  fontWeight: FontWeight.w600,
+                ),
+              ),
               Container(
                 padding: const EdgeInsets.symmetric(
-                    horizontal: 12, vertical: 6),
+                  horizontal: 12,
+                  vertical: 6,
+                ),
                 decoration: BoxDecoration(
-                  color: Colors.grey[100],
+                  color: hintColor.withValues(alpha: 0.1),
                   borderRadius: BorderRadius.circular(8),
                 ),
-                child: Text(type, style: textTheme.bodySmall),
+                child: Text(
+                  type,
+                  style: textTheme.bodySmall?.copyWith(color: hintColor),
+                ),
               ),
             ],
           ),
@@ -119,10 +135,10 @@ class EmployerJobCard extends StatelessWidget {
                   onPressed: onEdit,
                   label: const Center(child: Text('Edit')),
                   avatar: const Icon(Icons.edit, size: 16),
-                  backgroundColor: AppColors.white,
+                  backgroundColor: cardColor,
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(8),
-                    side: BorderSide(color: Colors.grey.shade300),
+                    side: BorderSide(color: hintColor.withValues(alpha: 0.2)),
                   ),
                 ),
               ),
@@ -132,14 +148,20 @@ class EmployerJobCard extends StatelessWidget {
                   onPressed: isOpen ? onClose : null,
                   label: Center(child: Text(isOpen ? 'Close' : 'Closed')),
                   avatar: Icon(
-                      isOpen ? Icons.lock_outline : Icons.lock, size: 16),
-                  backgroundColor: isOpen ? AppColors.white : Colors.grey[100],
-                  disabledColor: Colors.grey[100],
+                    isOpen ? Icons.lock_outline : Icons.lock,
+                    size: 16,
+                  ),
+                  backgroundColor: isOpen
+                      ? cardColor
+                      : hintColor.withValues(alpha: 0.05),
+                  disabledColor: hintColor.withValues(alpha: 0.1),
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(8),
                     side: BorderSide(
-                        color: isOpen ? Colors.grey.shade300 : Colors
-                            .transparent),
+                      color: isOpen
+                          ? hintColor.withValues(alpha: 0.2)
+                          : Colors.transparent,
+                    ),
                   ),
                 ),
               ),
