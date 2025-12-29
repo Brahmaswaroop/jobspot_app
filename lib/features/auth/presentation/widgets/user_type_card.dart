@@ -21,7 +21,9 @@ class UserTypeCard extends StatelessWidget {
       child: Container(
         padding: const EdgeInsets.all(16),
         decoration: BoxDecoration(
-          color: isSelected ? const Color(0xFF6C63FF).withOpacity(0.1) : Colors.grey[50],
+          color: isSelected
+              ? const Color(0xFF6C63FF).withValues(alpha: 0.1)
+              : Colors.grey[50],
           border: Border.all(
             color: isSelected ? const Color(0xFF6C63FF) : Colors.grey[300]!,
             width: isSelected ? 2 : 1,

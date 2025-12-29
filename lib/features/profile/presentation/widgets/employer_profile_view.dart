@@ -1,14 +1,49 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:jobspot_app/core/theme/app_theme.dart';
 import 'package:jobspot_app/core/utils/supabase_service.dart';
+import 'package:jobspot_app/data/services/profile_service.dart';
+import 'package:jobspot_app/features/profile/presentation/widgets/edit_business_profile_dialog.dart';
 import 'package:provider/provider.dart';
 
-class EmployerProfileView extends StatelessWidget {
+class EmployerProfileView extends StatefulWidget {
   const EmployerProfileView({super.key});
 
   @override
+  State<StatefulWidget> createState() => _EmployerProfileViewState();
+}
+
+class _EmployerProfileViewState extends State<EmployerProfileView> {
+  Map<String, dynamic>? _profile;
+
+  @override
+  void initState() {
+    super.initState();
+    fetchUserProfile();
+  }
+
+  Future<void> fetchUserProfile() async {
+    try {
+      final user = SupabaseService.getCurrentUser();
+      if (user != null) {
+        _profile = await ProfileService.fetchEmployerProfile(user.id);
+        setState(() {});
+      }
+    } catch (e) {
+      if (mounted) {
+        print(e);
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('error'.tr(args: [e.toString()]))),
+        );
+      }
+    }
+  }
+
+  @override
   Widget build(BuildContext context) {
-    final textTheme = Theme.of(context).textTheme;
+    final theme = Theme.of(context);
+    final textTheme = theme.textTheme;
+    final colorScheme = theme.colorScheme;
     final themeNotifier = Provider.of<ThemeNotifier>(context);
 
     return SingleChildScrollView(
@@ -17,21 +52,24 @@ class EmployerProfileView extends StatelessWidget {
         children: [
           // Company Header
           const SizedBox(height: 20),
-          const CircleAvatar(
+          CircleAvatar(
             radius: 50,
-            backgroundColor: AppColors.purple,
-            child: Icon(Icons.business, size: 50, color: Colors.white),
+            backgroundColor: colorScheme.primary,
+            child: const Icon(Icons.business, size: 50, color: Colors.white),
           ),
           const SizedBox(height: 16),
           Text(
-            'Google Inc.',
+            _profile?['company_name'] ?? '',
             style: textTheme.headlineMedium?.copyWith(
               fontWeight: FontWeight.bold,
+              color: colorScheme.onSurface,
             ),
           ),
           Text(
-            'Technology • California, USA',
-            style: textTheme.bodyMedium?.copyWith(color: Colors.grey[600]),
+            '${_profile?['industry'] ?? ''} • + ${_profile?['city'] ?? ''}',
+            style: textTheme.bodyMedium?.copyWith(
+              color: colorScheme.onSurfaceVariant,
+            ),
           ),
           const SizedBox(height: 32),
 
@@ -43,19 +81,19 @@ class EmployerProfileView extends StatelessWidget {
             context,
             Icons.email_outlined,
             'Email',
-            'hr@google.com',
+            _profile?['official_email'] ?? '',
           ),
           _buildInfoTile(
             context,
             Icons.phone_outlined,
             'Phone',
-            '+1 650-253-0000',
+            _profile?['contact_mobile'] ?? '',
           ),
           _buildInfoTile(
             context,
             Icons.location_on_outlined,
             'Address',
-            '1600 Amphitheatre Pkwy, Mountain View, CA',
+            _profile?['address'] ?? '',
           ),
 
           const SizedBox(height: 32),
@@ -65,8 +103,6 @@ class EmployerProfileView extends StatelessWidget {
           const SizedBox(height: 12),
           _buildMenuTile(
             context,
-            // Use a placeholder or null here because we are handling
-            // the icon inside the trailing widget for better control
             Icons.settings_display,
             'Dark Mode',
             () {},
@@ -90,14 +126,13 @@ class EmployerProfileView extends StatelessWidget {
                         ? Icons.dark_mode
                         : Icons.light_mode,
                     key: ValueKey<bool>(themeNotifier.isDarkMode),
-                    color: AppColors.darkPurple,
+                    color: colorScheme.primary,
                   ),
                 ),
                 const SizedBox(width: 8),
                 Switch(
                   value: themeNotifier.isDarkMode,
-                  inactiveTrackColor: AppColors.purple.withValues(alpha: 0.5),
-                  activeThumbColor: AppColors.purple,
+                  activeThumbColor: colorScheme.primary,
                   onChanged: (value) {
                     themeNotifier.setThemeMode(
                       value ? ThemeMode.dark : ThemeMode.light,
@@ -112,7 +147,13 @@ class EmployerProfileView extends StatelessWidget {
             context,
             Icons.edit_outlined,
             'Edit Business Profile',
-            () {},
+            () {
+              showDialog(
+                context: context,
+                builder: (context) =>
+                    EditBusinessProfileDialog(profile: _profile),
+              );
+            },
           ),
           _buildMenuTile(
             context,
@@ -144,11 +185,14 @@ class EmployerProfileView extends StatelessWidget {
                   );
                 }
               },
-              icon: const Icon(Icons.logout, color: Colors.red),
-              label: const Text('Log Out', style: TextStyle(color: Colors.red)),
+              icon: Icon(Icons.logout, color: colorScheme.error),
+              label: Text(
+                'Log Out',
+                style: TextStyle(color: colorScheme.error),
+              ),
               style: OutlinedButton.styleFrom(
                 padding: const EdgeInsets.symmetric(vertical: 16),
-                side: const BorderSide(color: Colors.red),
+                side: BorderSide(color: colorScheme.error),
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(12),
                 ),
@@ -168,7 +212,7 @@ class EmployerProfileView extends StatelessWidget {
         title,
         style: Theme.of(context).textTheme.titleLarge?.copyWith(
           fontWeight: FontWeight.bold,
-          color: AppColors.darkPurple,
+          color: Theme.of(context).colorScheme.primary,
         ),
       ),
     );
@@ -180,6 +224,7 @@ class EmployerProfileView extends StatelessWidget {
     String label,
     String value,
   ) {
+    final colorScheme = Theme.of(context).colorScheme;
     return Padding(
       padding: const EdgeInsets.only(bottom: 16),
       child: Row(
@@ -187,10 +232,10 @@ class EmployerProfileView extends StatelessWidget {
           Container(
             padding: const EdgeInsets.all(8),
             decoration: BoxDecoration(
-              color: AppColors.purple.withValues(alpha: 0.1),
+              color: colorScheme.primary.withValues(alpha: 0.1),
               borderRadius: BorderRadius.circular(8),
             ),
-            child: Icon(icon, color: AppColors.purple, size: 20),
+            child: Icon(icon, color: colorScheme.primary, size: 20),
           ),
           const SizedBox(width: 16),
           Expanded(
@@ -199,13 +244,17 @@ class EmployerProfileView extends StatelessWidget {
               children: [
                 Text(
                   label,
-                  style: const TextStyle(fontSize: 12, color: Colors.grey),
+                  style: TextStyle(
+                    fontSize: 12,
+                    color: colorScheme.onSurfaceVariant,
+                  ),
                 ),
                 Text(
                   value,
-                  style: const TextStyle(
+                  style: TextStyle(
                     fontSize: 14,
                     fontWeight: FontWeight.w500,
+                    color: colorScheme.onSurface,
                   ),
                 ),
               ],
@@ -223,18 +272,31 @@ class EmployerProfileView extends StatelessWidget {
     VoidCallback onTap, {
     Widget? trailing,
   }) {
+    final theme = Theme.of(context);
     return Card(
-      elevation: 0,
-      color: Theme.of(context).cardColor,
+      elevation: 1,
+      color: theme.cardColor,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(12),
-        side: BorderSide(color: Colors.grey.withValues(alpha: 0.1)),
+        side: BorderSide(color: Colors.grey.withValues(alpha: 0.3)),
       ),
       margin: const EdgeInsets.only(bottom: 12),
       child: ListTile(
-        leading: Icon(icon, color: AppColors.darkPurple),
-        title: Text(title, style: const TextStyle(fontWeight: FontWeight.w500)),
-        trailing: trailing ?? const Icon(Icons.chevron_right, size: 20),
+        leading: Icon(icon, color: theme.colorScheme.primary),
+        title: Text(
+          title,
+          style: TextStyle(
+            fontWeight: FontWeight.w500,
+            color: theme.colorScheme.onSurface,
+          ),
+        ),
+        trailing:
+            trailing ??
+            Icon(
+              Icons.chevron_right,
+              size: 20,
+              color: theme.colorScheme.onSurfaceVariant,
+            ),
         onTap: trailing == null ? onTap : null,
       ),
     );

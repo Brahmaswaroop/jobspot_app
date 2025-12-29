@@ -15,11 +15,6 @@ final supabase = Supabase.instance.client;
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await dotenv.load(fileName: ".env");
-  await Supabase.initialize(
-    url: dotenv.env['SUPABASE_URL']!,
-    anonKey: dotenv.env['SUPABASE_ANON_KEY']!,
-  );
   runApp(
     ChangeNotifierProvider(
       create: (_) => ThemeNotifier(),
@@ -74,10 +69,17 @@ class _RootPageState extends State<RootPage> {
   }
 
   Future<void> _initAuth() async {
+    await dotenv.load(fileName: ".env");
+    await Supabase.initialize(
+      url: dotenv.env['SUPABASE_URL']!,
+      anonKey: dotenv.env['SUPABASE_ANON_KEY']!,
+    );
     final session = supabase.auth.currentSession;
 
     if (session == null) {
       _updateHome(const LoginScreen());
+    } else {
+      _handleUser(session.user);
     }
 
     _authSub = supabase.auth.onAuthStateChange.listen((event) {

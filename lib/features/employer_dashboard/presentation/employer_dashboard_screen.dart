@@ -14,18 +14,47 @@ class EmployerDashboardScreen extends StatefulWidget {
 
 class _EmployerDashboardScreenState extends State<EmployerDashboardScreen> {
   int _selectedIndex = 0;
+  Key _refreshKey = UniqueKey();
 
-  final List<Widget> _screens = [
-    const EmployerHomeTab(),
-    const JobPostingTab(),
-    const ApplicantsTab(),
-    const ProfileTab(role: 'employer'),
-  ];
+  Future<void> _handleRefresh() async {
+    // Simulate a network delay
+    await Future.delayed(const Duration(milliseconds: 1500));
+    if (mounted) {
+      setState(() {
+        _refreshKey = UniqueKey();
+      });
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
+    
     return Scaffold(
-      body: IndexedStack(index: _selectedIndex, children: _screens),
+      body: RefreshIndicator(
+        onRefresh: _handleRefresh,
+        displacement: 40,
+        color: Theme.of(context).colorScheme.primary,
+        child: CustomScrollView(
+          physics: const AlwaysScrollableScrollPhysics(),
+          slivers: [
+            SliverFillRemaining(
+              hasScrollBody: true, // Allow internal scrolling in tabs
+              child: KeyedSubtree(
+                key: _refreshKey,
+                child: IndexedStack(
+                  index: _selectedIndex,
+                  children: [
+                    const EmployerHomeTab(),
+                    const JobPostingTab(),
+                    const ApplicantsTab(),
+                    const ProfileTab(role: 'employer'),
+                  ],
+                ),
+              ),
+            ),
+          ],
+        ),
+      ),
       bottomNavigationBar: NavigationBar(
         selectedIndex: _selectedIndex,
         onDestinationSelected: (index) {
@@ -36,7 +65,6 @@ class _EmployerDashboardScreenState extends State<EmployerDashboardScreen> {
         backgroundColor: Theme.of(context).colorScheme.surface,
         indicatorColor: Theme.of(context).colorScheme.primary,
         labelBehavior: NavigationDestinationLabelBehavior.onlyShowSelected,
-
         destinations: const [
           NavigationDestination(
             icon: Icon(Icons.home_outlined),
