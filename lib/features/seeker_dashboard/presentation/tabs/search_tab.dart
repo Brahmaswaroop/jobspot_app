@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:jobspot_app/core/theme/app_theme.dart';
-import 'package:jobspot_app/features/seeker_dashboard/presentation/widgets/job_card.dart';
+import 'package:jobspot_app/features/jobs/presentation/job_card.dart';
 
 class Job {
   final String company;
@@ -32,11 +32,51 @@ class SearchTab extends StatefulWidget {
 class _SearchTabState extends State<SearchTab> {
   // --- Master list of all available jobs (in a real app, this would come from an API) ---
   final List<Job> _allJobs = [
-    Job(company: 'Google Inc.', position: 'Senior UI/UX Designer', location: 'California, USA', salary: '\$120k - \$150k', type: 'Full Time', logo: Icons.g_mobiledata, logoColor: AppColors.purple),
-    Job(company: 'Apple Inc.', position: 'Product Manager', location: 'New York, USA', salary: '\$140k - \$180k', type: 'Full Time', logo: Icons.apple, logoColor: AppColors.orange),
-    Job(company: 'Microsoft', position: 'Software Engineer', location: 'Seattle, USA', salary: '\$110k - \$145k', type: 'Remote', logo: Icons.business, logoColor: AppColors.purple),
-    Job(company: 'Facebook', position: 'Data Scientist', location: 'Austin, USA', salary: '\$135k - \$160k', type: 'Contract', logo: Icons.facebook, logoColor: const Color(0xFF1877F2)),
-    Job(company: 'Netflix', position: 'Flutter Developer', location: 'Los Gatos, USA', salary: '\$115k - \$155k', type: 'Part Time', logo: Icons.movie_filter, logoColor: const Color(0xFFE50914)),
+    Job(
+      company: 'Google Inc.',
+      position: 'Senior UI/UX Designer',
+      location: 'California, USA',
+      salary: '\$120k - \$150k',
+      type: 'Full Time',
+      logo: Icons.g_mobiledata,
+      logoColor: AppColors.purple,
+    ),
+    Job(
+      company: 'Apple Inc.',
+      position: 'Product Manager',
+      location: 'New York, USA',
+      salary: '\$140k - \$180k',
+      type: 'Full Time',
+      logo: Icons.apple,
+      logoColor: AppColors.orange,
+    ),
+    Job(
+      company: 'Microsoft',
+      position: 'Software Engineer',
+      location: 'Seattle, USA',
+      salary: '\$110k - \$145k',
+      type: 'Remote',
+      logo: Icons.business,
+      logoColor: AppColors.purple,
+    ),
+    Job(
+      company: 'Facebook',
+      position: 'Data Scientist',
+      location: 'Austin, USA',
+      salary: '\$135k - \$160k',
+      type: 'Contract',
+      logo: Icons.facebook,
+      logoColor: const Color(0xFF1877F2),
+    ),
+    Job(
+      company: 'Netflix',
+      position: 'Flutter Developer',
+      location: 'Los Gatos, USA',
+      salary: '\$115k - \$155k',
+      type: 'Part Time',
+      logo: Icons.movie_filter,
+      logoColor: const Color(0xFFE50914),
+    ),
   ];
 
   // --- List of jobs that will be displayed in the UI ---
@@ -44,7 +84,12 @@ class _SearchTabState extends State<SearchTab> {
 
   // State for active filters
   String? _selectedJobType;
-  final List<String> _jobTypes = ['Full Time', 'Part Time', 'Remote', 'Contract'];
+  final List<String> _jobTypes = [
+    'Full Time',
+    'Part Time',
+    'Remote',
+    'Contract',
+  ];
 
   @override
   void initState() {
@@ -61,7 +106,9 @@ class _SearchTabState extends State<SearchTab> {
         _displayedJobs = List.from(_allJobs);
       } else {
         // Otherwise, filter the list
-        _displayedJobs = _allJobs.where((job) => job.type == _selectedJobType).toList();
+        _displayedJobs = _allJobs
+            .where((job) => job.type == _selectedJobType)
+            .toList();
       }
     });
   }
@@ -108,11 +155,15 @@ class _SearchTabState extends State<SearchTab> {
                         backgroundColor: Theme.of(context).cardColor,
                         selectedColor: AppColors.purple,
                         labelStyle: TextStyle(
-                          color: isSelected ? Colors.white : Theme.of(context).textTheme.bodyLarge?.color,
+                          color: isSelected
+                              ? Colors.white
+                              : Theme.of(context).textTheme.bodyLarge?.color,
                         ),
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(8),
-                          side: BorderSide(color: Colors.grey.withValues(alpha: 0.3)),
+                          side: BorderSide(
+                            color: Colors.grey.withValues(alpha: 0.3),
+                          ),
                         ),
                         showCheckmark: false,
                       );
@@ -168,13 +219,16 @@ class _SearchTabState extends State<SearchTab> {
                   children: [
                     // --- Filter Chip ---
                     ActionChip(
-                      onPressed: _openFilterOptions, // This now opens the popup
+                      onPressed: _openFilterOptions,
+                      // This now opens the popup
                       avatar: const Icon(Icons.filter_list, size: 18),
                       label: const Text('Filter'),
                       backgroundColor: Theme.of(context).cardColor,
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(8),
-                        side: BorderSide(color: Colors.grey.withValues(alpha: 0.3)),
+                        side: BorderSide(
+                          color: Colors.grey.withValues(alpha: 0.3),
+                        ),
                       ),
                     ),
                     const SizedBox(width: 8),
@@ -189,7 +243,9 @@ class _SearchTabState extends State<SearchTab> {
                       backgroundColor: Theme.of(context).cardColor,
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(8),
-                        side: BorderSide(color: Colors.grey.withValues(alpha: 0.3)),
+                        side: BorderSide(
+                          color: Colors.grey.withValues(alpha: 0.3),
+                        ),
                       ),
                     ),
 
@@ -224,7 +280,9 @@ class _SearchTabState extends State<SearchTab> {
                   ),
                   Text(
                     'Sort by: Newest',
-                    style: Theme.of(context).textTheme.bodyMedium?.copyWith(color: Theme.of(context).hintColor),
+                    style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                      color: Theme.of(context).hintColor,
+                    ),
                   ),
                 ],
               ),
@@ -235,17 +293,23 @@ class _SearchTabState extends State<SearchTab> {
                 shrinkWrap: true,
                 physics: const NeverScrollableScrollPhysics(),
                 itemCount: _displayedJobs.length,
-                separatorBuilder: (context, index) => const SizedBox(height: 12),
+                separatorBuilder: (context, index) =>
+                    const SizedBox(height: 12),
                 itemBuilder: (context, index) {
                   final job = _displayedJobs[index];
                   return JobCard(
-                    company: job.company,
-                    position: job.position,
-                    location: job.location,
-                    salary: job.salary,
-                    type: job.type,
-                    logo: job.logo,
-                    logoColor: job.logoColor,
+                    job: const {
+                      'title': 'Product Manager',
+                      'work_mode': 'Remote',
+                      'location': 'Mumbai, India',
+                      'pay_amount_min': 45000,
+                      'pay_amount_max': 60000,
+                      'pay_type': 'monthly',
+                      'working_days': ['Mon', 'Tue', 'Wed', 'Thu', 'Fri'],
+                      'shift_start': '09:00:00',
+                      'shift_end': '18:00:00',
+                    },
+                    onApply: () {},
                   );
                 },
               ),

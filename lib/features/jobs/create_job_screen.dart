@@ -62,6 +62,21 @@ class _CreateJobScreenState extends State<CreateJobScreen> {
     final TimeOfDay? picked = await showTimePicker(
       context: context,
       initialTime: isStart ? _shiftStart : _shiftEnd,
+      builder: (context, child) {
+        return Theme(
+          data: Theme.of(context).copyWith(
+            timePickerTheme: TimePickerThemeData(
+              backgroundColor: Theme.of(context).cardColor,
+              dayPeriodColor: WidgetStateColor.resolveWith(
+                (states) => states.contains(WidgetState.selected)
+                    ? Theme.of(context).primaryColor.withValues(alpha: 0.2)
+                    : Colors.transparent,
+              ),
+            ),
+          ),
+          child: child!,
+        );
+      },
     );
     if (picked != null) {
       setState(() {
@@ -84,7 +99,11 @@ class _CreateJobScreenState extends State<CreateJobScreen> {
     if (!_formKey.currentState!.validate()) return;
     if (_selectedDays.isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Please select at least one working day')),
+        SnackBar(
+          content: const Text('Please select at least one working day'),
+          backgroundColor: Theme.of(context).colorScheme.error,
+          behavior: SnackBarBehavior.floating,
+        ),
       );
       return;
     }
@@ -130,13 +149,21 @@ class _CreateJobScreenState extends State<CreateJobScreen> {
       if (mounted) {
         Navigator.pop(context, true);
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('Job posted successfully!')),
+          const SnackBar(
+            content: Text('Job posted successfully!'),
+            behavior: SnackBarBehavior.floating,
+          ),
         );
       }
     } catch (e) {
       if (mounted) {
+        print(e);
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Error: $e'), backgroundColor: Colors.red),
+          SnackBar(
+            content: Text('Error: $e'),
+            backgroundColor: Colors.red,
+            behavior: SnackBarBehavior.floating,
+          ),
         );
       }
     } finally {
@@ -146,253 +173,286 @@ class _CreateJobScreenState extends State<CreateJobScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-
     return Scaffold(
-      appBar: AppBar(title: const Text('Post a Job')),
+      appBar: AppBar(title: const Text('Post New Job')),
       body: _isLoading
           ? const Center(child: CircularProgressIndicator())
           : SingleChildScrollView(
-              padding: const EdgeInsets.all(24),
+              padding: const EdgeInsets.all(16),
               child: Form(
                 key: _formKey,
                 child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: [
-                    _buildSectionHeader('Basic Details'),
-                    TextFormField(
-                      controller: _titleController,
-                      decoration: const InputDecoration(
-                        labelText: 'Job Title*',
-                        hintText: 'e.g. Delivery Partner',
-                      ),
-                      validator: (v) => v!.isEmpty ? 'Required' : null,
-                    ),
-                    const SizedBox(height: 16),
-                    TextFormField(
-                      controller: _descriptionController,
-                      maxLines: 4,
-                      decoration: const InputDecoration(
-                        labelText: 'Job Description*',
-                      ),
-                      validator: (v) => v!.isEmpty ? 'Required' : null,
-                    ),
-                    const SizedBox(height: 24),
-
-                    _buildSectionHeader('Work Details'),
-                    DropdownButtonFormField<String>(
-                      initialValue: _workMode,
-                      decoration: const InputDecoration(labelText: 'Work Mode'),
-                      items: ['onsite', 'remote', 'hybrid']
-                          .map(
-                            (m) => DropdownMenuItem(
-                              value: m,
-                              child: Text(m.toUpperCase()),
-                            ),
-                          )
-                          .toList(),
-                      onChanged: (v) => setState(() => _workMode = v!),
-                    ),
-                    const SizedBox(height: 16),
-                    TextFormField(
-                      controller: _locationController,
-                      decoration: const InputDecoration(
-                        labelText: 'Location',
-                        prefixIcon: Icon(Icons.location_on_outlined),
-                      ),
-                    ),
-                    const SizedBox(height: 24),
-
-                    _buildSectionHeader('Pay & Vacancy'),
-                    Row(
+                    _buildSectionCard(
+                      title: 'Basic Details',
+                      icon: Icons.article_outlined,
                       children: [
-                        Expanded(
-                          child: DropdownButtonFormField<String>(
-                            initialValue: _payType,
-                            decoration: const InputDecoration(
-                              labelText: 'Pay Type',
-                            ),
-                            items:
-                                [
-                                      'hourly',
-                                      'daily',
-                                      'weekly',
-                                      'monthly',
-                                      'task_based',
-                                    ]
-                                    .map(
-                                      (t) => DropdownMenuItem(
-                                        value: t,
-                                        child: Text(t.toUpperCase()),
-                                      ),
-                                    )
-                                    .toList(),
-                            onChanged: (v) => setState(() => _payType = v!),
+                        TextFormField(
+                          controller: _titleController,
+                          textCapitalization: TextCapitalization.sentences,
+                          decoration: const InputDecoration(
+                            labelText: 'Job Title*',
+                            hintText: 'e.g. Delivery Partner',
+                            prefixIcon: Icon(Icons.work_outline),
                           ),
+                          validator: (v) => v!.isEmpty ? 'Required' : null,
                         ),
-                        const SizedBox(width: 16),
-                        Expanded(
-                          child: TextFormField(
-                            controller: _vacanciesController,
-                            keyboardType: TextInputType.number,
-                            decoration: const InputDecoration(
-                              labelText: 'Vacancies',
-                            ),
+                        const SizedBox(height: 16),
+                        TextFormField(
+                          controller: _descriptionController,
+                          maxLines: 4,
+                          textCapitalization: TextCapitalization.sentences,
+                          decoration: const InputDecoration(
+                            labelText: 'Job Description*',
+                            alignLabelWithHint: true,
+                            prefixIcon: Icon(Icons.description_outlined),
                           ),
+                          validator: (v) => v!.isEmpty ? 'Required' : null,
                         ),
                       ],
                     ),
-                    const SizedBox(height: 16),
-                    Row(
+
+                    _buildSectionCard(
+                      title: 'Work Location & Mode',
+                      icon: Icons.location_on_outlined,
                       children: [
-                        Expanded(
-                          child: TextFormField(
-                            controller: _minPayController,
-                            keyboardType: TextInputType.number,
-                            decoration: const InputDecoration(
-                              labelText: 'Min Pay (INR)*',
-                            ),
-                            validator: (v) => v!.isEmpty ? 'Required' : null,
+                        DropdownButtonFormField<String>(
+                          initialValue: _workMode,
+                          decoration: const InputDecoration(
+                            labelText: 'Work Mode',
+                            prefixIcon: Icon(Icons.laptop_chromebook),
                           ),
+                          items: ['onsite', 'remote', 'hybrid']
+                              .map(
+                                (m) => DropdownMenuItem(
+                                  value: m,
+                                  child: Text(m.toUpperCase()),
+                                ),
+                              )
+                              .toList(),
+                          onChanged: (v) => setState(() => _workMode = v!),
                         ),
-                        const SizedBox(width: 16),
-                        Expanded(
-                          child: TextFormField(
-                            controller: _maxPayController,
-                            keyboardType: TextInputType.number,
+                        if (_workMode != 'remote') ...[
+                          const SizedBox(height: 16),
+                          TextFormField(
+                            controller: _locationController,
                             decoration: const InputDecoration(
-                              labelText: 'Max Pay (INR)',
+                              labelText: 'Location Address',
+                              prefixIcon: Icon(Icons.map_outlined),
                             ),
                           ),
+                        ],
+                      ],
+                    ),
+
+                    _buildSectionCard(
+                      title: 'Pay & Vacancies',
+                      icon: Icons.payments_outlined,
+                      children: [
+                        Row(
+                          children: [
+                            Expanded(
+                              flex: 2,
+                              child: DropdownButtonFormField<String>(
+                                initialValue: _payType,
+                                isExpanded: true,
+                                decoration: const InputDecoration(
+                                  labelText: 'Pay Type',
+                                  prefixIcon: Icon(Icons.calendar_month),
+                                ),
+                                items:
+                                    [
+                                          'hourly',
+                                          'daily',
+                                          'weekly',
+                                          'monthly',
+                                          'task_based',
+                                        ]
+                                        .map(
+                                          (t) => DropdownMenuItem(
+                                            value: t,
+                                            child: Text(t.toUpperCase()),
+                                          ),
+                                        )
+                                        .toList(),
+                                onChanged: (v) => setState(() => _payType = v!),
+                              ),
+                            ),
+                            const SizedBox(width: 12),
+                            Expanded(
+                              flex: 1,
+                              child: TextFormField(
+                                controller: _vacanciesController,
+                                keyboardType: TextInputType.number,
+                                decoration: const InputDecoration(
+                                  labelText: 'Openings',
+                                  prefixIcon: Icon(Icons.people_alt_outlined),
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                        const SizedBox(height: 16),
+                        Row(
+                          children: [
+                            Expanded(
+                              child: TextFormField(
+                                controller: _minPayController,
+                                keyboardType: TextInputType.number,
+                                decoration: const InputDecoration(
+                                  labelText: 'Min (₹)*',
+                                  prefixIcon: Icon(Icons.currency_rupee),
+                                ),
+                                validator: (v) =>
+                                    v!.isEmpty ? 'Required' : null,
+                              ),
+                            ),
+                            const SizedBox(width: 12),
+                            Expanded(
+                              child: TextFormField(
+                                controller: _maxPayController,
+                                keyboardType: TextInputType.number,
+                                decoration: const InputDecoration(
+                                  labelText: 'Max (₹)',
+                                  prefixIcon: Icon(Icons.currency_rupee),
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                        const SizedBox(height: 8),
+                        SwitchListTile(
+                          contentPadding: EdgeInsets.zero,
+                          title: const Text('Same Day Payout?'),
+                          subtitle: const Text(
+                            'Enable if you pay workers immediately',
+                          ),
+                          value: _sameDayPay,
+                          onChanged: (v) => setState(() => _sameDayPay = v),
                         ),
                       ],
                     ),
-                    SwitchListTile(
-                      inactiveTrackColor: Theme.of(context).hintColor,
-                      title: const Text('Same Day Pay'),
-                      value: _sameDayPay,
-                      onChanged: (v) => setState(() => _sameDayPay = v),
-                      contentPadding: EdgeInsets.zero,
-                    ),
-                    const SizedBox(height: 24),
 
-                    _buildSectionHeader('Working Days'),
-                    Wrap(
-                      spacing: 8,
-                      children: _daysOfWeek.map((day) {
-                        final isSelected = _selectedDays.contains(day);
-                        return FilterChip(
-                          label: Text(day.substring(0, 3)),
-                          selected: isSelected,
-                          onSelected: (selected) {
-                            setState(() {
-                              if (selected) {
-                                _selectedDays.add(day);
-                              } else {
-                                _selectedDays.remove(day);
-                              }
-                            });
-                          },
-                        );
-                      }).toList(),
-                    ),
-                    const SizedBox(height: 24),
-
-                    _buildSectionHeader('Shift Timing'),
-                    Row(
+                    _buildSectionCard(
+                      title: 'Schedule & Shifts',
+                      icon: Icons.access_time,
                       children: [
-                        Expanded(
-                          child: ListTile(
-                            title: const Text('Start Time'),
-                            subtitle: Text(_shiftStart.format(context)),
-                            onTap: () => _selectTime(context, true),
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(8),
-                              side: BorderSide(color: theme.dividerColor),
-                            ),
-                          ),
+                        const Text(
+                          'Working Days',
+                          style: TextStyle(fontWeight: FontWeight.w600),
                         ),
-                        const SizedBox(width: 16),
-                        Expanded(
-                          child: ListTile(
-                            title: const Text('End Time'),
-                            subtitle: Text(_shiftEnd.format(context)),
-                            onTap: () => _selectTime(context, false),
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(8),
-                              side: BorderSide(color: theme.dividerColor),
+                        const SizedBox(height: 8),
+                        Wrap(
+                          spacing: 8,
+                          runSpacing: 8,
+                          children: _daysOfWeek.map((day) {
+                            final isSelected = _selectedDays.contains(day);
+                            return FilterChip(
+                              label: Text(day.substring(0, 3)),
+                              selected: isSelected,
+                              showCheckmark: false,
+                              onSelected: (selected) {
+                                setState(() {
+                                  if (selected) {
+                                    _selectedDays.add(day);
+                                  } else {
+                                    _selectedDays.remove(day);
+                                  }
+                                });
+                              },
+                            );
+                          }).toList(),
+                        ),
+                        const SizedBox(height: 24),
+                        Row(
+                          children: [
+                            Expanded(
+                              child: _buildTimePickerField(
+                                'Start Time',
+                                _shiftStart,
+                                true,
+                              ),
                             ),
-                          ),
+                            const SizedBox(width: 12),
+                            Expanded(
+                              child: _buildTimePickerField(
+                                'End Time',
+                                _shiftEnd,
+                                false,
+                              ),
+                            ),
+                          ],
                         ),
                       ],
                     ),
-                    const SizedBox(height: 24),
 
-                    _buildSectionHeader('Candidate Preferences'),
-                    TextFormField(
-                      controller: _skillsController,
-                      decoration: const InputDecoration(
-                        labelText: 'Skills (comma separated)',
-                        hintText: 'e.g. Driving, Cooking',
-                      ),
-                    ),
-                    const SizedBox(height: 16),
-                    DropdownButtonFormField<String>(
-                      initialValue: _genderPreference,
-                      decoration: const InputDecoration(
-                        labelText: 'Gender Preference',
-                      ),
-                      items: ['any', 'male', 'female']
-                          .map(
-                            (g) => DropdownMenuItem(
-                              value: g,
-                              child: Text(g.toUpperCase()),
-                            ),
-                          )
-                          .toList(),
-                      onChanged: (v) => setState(() => _genderPreference = v!),
-                    ),
-                    const SizedBox(height: 16),
-                    Row(
+                    _buildSectionCard(
+                      title: 'Requirements',
+                      icon: Icons.rule,
                       children: [
-                        Expanded(
-                          child: TextFormField(
-                            controller: _minAgeController,
-                            keyboardType: TextInputType.number,
-                            decoration: const InputDecoration(
-                              labelText: 'Min Age',
-                            ),
+                        TextFormField(
+                          controller: _skillsController,
+                          decoration: const InputDecoration(
+                            labelText: 'Skills Required',
+                            hintText: 'e.g. Driving, Cooking, Java',
+                            prefixIcon: Icon(Icons.stars_outlined),
                           ),
                         ),
-                        const SizedBox(width: 16),
-                        Expanded(
-                          child: TextFormField(
-                            controller: _maxAgeController,
-                            keyboardType: TextInputType.number,
-                            decoration: const InputDecoration(
-                              labelText: 'Max Age',
-                            ),
+                        const SizedBox(height: 16),
+                        DropdownButtonFormField<String>(
+                          initialValue: _genderPreference,
+                          decoration: const InputDecoration(
+                            labelText: 'Gender Preference',
+                            prefixIcon: Icon(Icons.person_outline),
                           ),
+                          items: ['any', 'male', 'female']
+                              .map(
+                                (g) => DropdownMenuItem(
+                                  value: g,
+                                  child: Text(g.toUpperCase()),
+                                ),
+                              )
+                              .toList(),
+                          onChanged: (v) =>
+                              setState(() => _genderPreference = v!),
+                        ),
+                        const SizedBox(height: 16),
+                        Row(
+                          children: [
+                            Expanded(
+                              child: TextFormField(
+                                controller: _minAgeController,
+                                keyboardType: TextInputType.number,
+                                decoration: const InputDecoration(
+                                  labelText: 'Min Age',
+                                  prefixIcon: Icon(Icons.remove_circle_outline),
+                                ),
+                              ),
+                            ),
+                            const SizedBox(width: 12),
+                            Expanded(
+                              child: TextFormField(
+                                controller: _maxAgeController,
+                                keyboardType: TextInputType.number,
+                                decoration: const InputDecoration(
+                                  labelText: 'Max Age',
+                                  prefixIcon: Icon(Icons.add_circle_outline),
+                                ),
+                              ),
+                            ),
+                          ],
                         ),
                       ],
                     ),
-                    const SizedBox(height: 40),
 
-                    SizedBox(
-                      width: double.infinity,
-                      height: 50,
-                      child: ElevatedButton(
-                        onPressed: _submit,
-                        child: const Text(
-                          'POST JOB',
-                          style: TextStyle(
-                            fontWeight: FontWeight.bold,
-                            fontSize: 16,
-                          ),
-                        ),
-                      ),
+                    const SizedBox(height: 16),
+                    ElevatedButton.icon(
+                      onPressed: _submit,
+                      icon: const Icon(Icons.send_rounded),
+                      label: const Text('POST JOB NOW'),
                     ),
-                    const SizedBox(height: 20),
+                    const SizedBox(height: 32),
                   ],
                 ),
               ),
@@ -400,14 +460,54 @@ class _CreateJobScreenState extends State<CreateJobScreen> {
     );
   }
 
-  Widget _buildSectionHeader(String title) {
-    return Padding(
-      padding: const EdgeInsets.only(bottom: 16),
-      child: Text(
-        title,
-        style: Theme.of(context).textTheme.titleLarge?.copyWith(
-          fontWeight: FontWeight.bold,
-          color: Theme.of(context).colorScheme.primary,
+  // Helper widget to make sections look cleaner
+  Widget _buildSectionCard({
+    required String title,
+    required IconData icon,
+    required List<Widget> children,
+  }) {
+    return Card(
+      elevation: 0,
+      // Using flat style for modern look, increase if you prefer shadow
+      margin: const EdgeInsets.only(bottom: 20),
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(16),
+        side: BorderSide(color: Colors.grey.withValues(alpha: 0.1)),
+      ),
+      child: Padding(
+        padding: const EdgeInsets.all(20),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Row(
+              children: [
+                Icon(icon, color: Theme.of(context).primaryColor, size: 22),
+                const SizedBox(width: 10),
+                Text(title, style: Theme.of(context).textTheme.headlineMedium),
+              ],
+            ),
+            const Divider(height: 24),
+            ...children,
+          ],
+        ),
+      ),
+    );
+  }
+
+  // Custom Time Picker widget that mimics an input field
+  Widget _buildTimePickerField(String label, TimeOfDay time, bool isStart) {
+    return InkWell(
+      onTap: () => _selectTime(context, isStart),
+      borderRadius: BorderRadius.circular(12),
+      child: InputDecorator(
+        decoration: InputDecoration(
+          labelText: label,
+          prefixIcon: const Icon(Icons.schedule),
+          border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
+        ),
+        child: Text(
+          time.format(context),
+          style: Theme.of(context).textTheme.bodyLarge,
         ),
       ),
     );

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:jobspot_app/core/theme/app_theme.dart';
 import 'package:jobspot_app/features/seeker_dashboard/presentation/widgets/stat_card.dart';
-import 'package:jobspot_app/features/employer_dashboard/presentation/widgets/employer_job_card.dart';
+import 'package:jobspot_app/features/jobs/presentation/employer_job_card.dart';
 import 'package:jobspot_app/features/employer_dashboard/presentation/widgets/applicant_card.dart';
 
 class EmployerHomeTab extends StatelessWidget {
@@ -115,14 +115,16 @@ class EmployerHomeTab extends StatelessWidget {
           ),
           const SizedBox(height: 16),
           EmployerJobCard(
-            company: 'Google Inc.',
-            position: 'Senior UI/UX Designer',
-            location: 'California, USA',
-            salary: '\$120k - \$150k',
-            type: 'Full Time',
-            logo: Icons.g_mobiledata,
-            logoColor: AppColors.purple,
-            status: 'open',
+            job: const {
+              'title': 'Senior UI/UX Designer',
+              'work_mode': 'On-site',
+              'location': 'California, USA',
+              'pay_amount_min': 120000,
+              'pay_amount_max': 150000,
+              'pay_type': 'yearly',
+              'is_active': true,
+              'same_day_pay': true,
+            },
             onEdit: () {},
             onClose: () {},
           ),

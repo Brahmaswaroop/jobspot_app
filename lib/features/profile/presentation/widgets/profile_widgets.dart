@@ -1,4 +1,90 @@
 import 'package:flutter/material.dart';
+import 'package:jobspot_app/core/theme/app_theme.dart';
+import 'package:provider/provider.dart';
+
+class ProfileHeader extends StatelessWidget {
+  final String? imageUrl;
+  final String title;
+  final String subtitle;
+  final VoidCallback onEdit;
+  final IconData? fallbackIcon;
+
+  const ProfileHeader({
+    super.key,
+    this.imageUrl,
+    required this.title,
+    required this.subtitle,
+    required this.onEdit,
+    this.fallbackIcon,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final colorScheme = theme.colorScheme;
+
+    return Container(
+      width: double.infinity,
+      padding: const EdgeInsets.all(24),
+      decoration: BoxDecoration(
+        gradient: LinearGradient(
+          colors: [colorScheme.primary, colorScheme.secondary],
+          begin: Alignment.topLeft,
+          end: Alignment.bottomRight,
+        ),
+      ),
+      child: Column(
+        children: [
+          Container(
+            padding: const EdgeInsets.all(4),
+            decoration: const BoxDecoration(
+              color: Colors.white,
+              shape: BoxShape.circle,
+            ),
+            child: CircleAvatar(
+              radius: 50,
+              backgroundColor: Colors.grey[200],
+              child: Icon(
+                fallbackIcon ?? Icons.person,
+                size: 50,
+                color: colorScheme.primary,
+              ),
+            ),
+          ),
+          const SizedBox(height: 16),
+          Text(
+            title,
+            style: theme.textTheme.headlineMedium?.copyWith(
+              color: Colors.white,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+          const SizedBox(height: 4),
+          Text(
+            subtitle,
+            style: theme.textTheme.bodyLarge?.copyWith(
+              color: Colors.white.withValues(alpha: 0.9),
+            ),
+          ),
+          const SizedBox(height: 16),
+          ElevatedButton.icon(
+            onPressed: onEdit,
+            icon: const Icon(Icons.edit, size: 18),
+            label: const Text('Edit Profile'),
+            style: ElevatedButton.styleFrom(
+              backgroundColor: Colors.white,
+              foregroundColor: colorScheme.primary,
+              padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(20),
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
 
 class ProfileSectionHeader extends StatelessWidget {
   final String title;
@@ -12,9 +98,9 @@ class ProfileSectionHeader extends StatelessWidget {
       child: Text(
         title,
         style: Theme.of(context).textTheme.titleLarge?.copyWith(
-              fontWeight: FontWeight.bold,
-              color: Theme.of(context).colorScheme.primary,
-            ),
+          fontWeight: FontWeight.bold,
+          color: Theme.of(context).colorScheme.primary,
+        ),
       ),
     );
   }
@@ -41,10 +127,7 @@ class ProfileInfoTile extends StatelessWidget {
         children: [
           Container(
             padding: const EdgeInsets.all(8),
-            decoration: BoxDecoration(
-              color: colorScheme.primary.withValues(alpha: 0.1),
-              borderRadius: BorderRadius.circular(8),
-            ),
+            decoration: BoxDecoration(borderRadius: BorderRadius.circular(8)),
             child: Icon(icon, color: colorScheme.primary, size: 20),
           ),
           const SizedBox(width: 16),
@@ -56,7 +139,7 @@ class ProfileInfoTile extends StatelessWidget {
                   label,
                   style: TextStyle(
                     fontSize: 12,
-                    color: colorScheme.onSurfaceVariant,
+                    color: Theme.of(context).hintColor,
                   ),
                 ),
                 Text(
@@ -110,13 +193,61 @@ class ProfileMenuTile extends StatelessWidget {
             color: theme.colorScheme.onSurface,
           ),
         ),
-        trailing: trailing ??
+        trailing:
+            trailing ??
             Icon(
               Icons.chevron_right,
               size: 20,
               color: theme.colorScheme.onSurfaceVariant,
             ),
         onTap: trailing == null ? onTap : null,
+      ),
+    );
+  }
+}
+
+class ThemeModeTile extends StatelessWidget {
+  const ThemeModeTile({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    final themeNotifier = Provider.of<ThemeNotifier>(context);
+
+    return ProfileMenuTile(
+      icon: themeNotifier.isDarkMode ? Icons.dark_mode : Icons.light_mode,
+      title: 'Dark Mode',
+      onTap: () {},
+      trailing: Switch(
+        value: themeNotifier.isDarkMode,
+        onChanged: (value) {
+          themeNotifier.setThemeMode(value ? ThemeMode.dark : ThemeMode.light);
+        },
+      ),
+    );
+  }
+}
+
+class LogoutButton extends StatelessWidget {
+  final VoidCallback onLogout;
+
+  const LogoutButton({super.key, required this.onLogout});
+
+  @override
+  Widget build(BuildContext context) {
+    final colorScheme = Theme.of(context).colorScheme;
+    return SizedBox(
+      width: double.infinity,
+      child: OutlinedButton.icon(
+        onPressed: onLogout,
+        icon: Icon(Icons.logout, color: colorScheme.error),
+        label: Text('Logout', style: TextStyle(color: colorScheme.error)),
+        style: OutlinedButton.styleFrom(
+          padding: const EdgeInsets.symmetric(vertical: 16),
+          side: BorderSide(color: colorScheme.error),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(12),
+          ),
+        ),
       ),
     );
   }

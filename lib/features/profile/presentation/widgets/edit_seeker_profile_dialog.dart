@@ -8,7 +8,8 @@ class EditSeekerProfileDialog extends StatefulWidget {
   const EditSeekerProfileDialog({super.key, required this.profile});
 
   @override
-  State<EditSeekerProfileDialog> createState() => _EditSeekerProfileDialogState();
+  State<EditSeekerProfileDialog> createState() =>
+      _EditSeekerProfileDialogState();
 }
 
 class _EditSeekerProfileDialogState extends State<EditSeekerProfileDialog> {
@@ -36,7 +37,9 @@ class _EditSeekerProfileDialogState extends State<EditSeekerProfileDialog> {
     final profile = widget.profile;
     _nameController = TextEditingController(text: profile?['full_name'] ?? '');
     _cityController = TextEditingController(text: profile?['city'] ?? '');
-    _educationController = TextEditingController(text: profile?['education_level'] ?? '');
+    _educationController = TextEditingController(
+      text: profile?['education_level'] ?? '',
+    );
     _skillsController = TextEditingController(
       text: (profile?['skills'] as List?)?.join(', ') ?? '',
     );
@@ -80,7 +83,7 @@ class _EditSeekerProfileDialogState extends State<EditSeekerProfileDialog> {
       };
 
       await ProfileService.updateSeekerProfile(userId, updateData);
-      
+
       if (mounted) {
         Navigator.pop(context, true);
         ScaffoldMessenger.of(context).showSnackBar(
@@ -119,8 +122,14 @@ class _EditSeekerProfileDialogState extends State<EditSeekerProfileDialog> {
                   children: [
                     CircleAvatar(
                       radius: 40,
-                      backgroundColor: theme.colorScheme.primary.withValues(alpha: 0.1),
-                      child: Icon(Icons.person, size: 40, color: theme.colorScheme.primary),
+                      backgroundColor: theme.colorScheme.primary.withValues(
+                        alpha: 0.1,
+                      ),
+                      child: Icon(
+                        Icons.person,
+                        size: 40,
+                        color: theme.colorScheme.primary,
+                      ),
                     ),
                     Positioned(
                       bottom: 0,
@@ -131,7 +140,11 @@ class _EditSeekerProfileDialogState extends State<EditSeekerProfileDialog> {
                           color: theme.colorScheme.primary,
                           shape: BoxShape.circle,
                         ),
-                        child: const Icon(Icons.camera_alt, size: 16, color: Colors.white),
+                        child: const Icon(
+                          Icons.camera_alt,
+                          size: 16,
+                          color: Colors.white,
+                        ),
                       ),
                     ),
                   ],
@@ -173,7 +186,7 @@ class _EditSeekerProfileDialogState extends State<EditSeekerProfileDialog> {
               ),
               const SizedBox(height: 16),
               DropdownButtonFormField<String>(
-                value: _selectedJobType,
+                initialValue: _selectedJobType,
                 decoration: const InputDecoration(
                   labelText: 'Preferred Job Type',
                   prefixIcon: Icon(Icons.work_outline),
@@ -181,7 +194,9 @@ class _EditSeekerProfileDialogState extends State<EditSeekerProfileDialog> {
                 items: _jobTypes.map((type) {
                   return DropdownMenuItem(value: type, child: Text(type));
                 }).toList(),
-                onChanged: _isLoading ? null : (value) => setState(() => _selectedJobType = value),
+                onChanged: _isLoading
+                    ? null
+                    : (value) => setState(() => _selectedJobType = value),
               ),
             ],
           ),
@@ -198,7 +213,10 @@ class _EditSeekerProfileDialogState extends State<EditSeekerProfileDialog> {
               ? const SizedBox(
                   height: 20,
                   width: 20,
-                  child: CircularProgressIndicator(strokeWidth: 2, color: Colors.white),
+                  child: CircularProgressIndicator(
+                    strokeWidth: 2,
+                    color: Colors.white,
+                  ),
                 )
               : const Text('Save Changes'),
         ),

@@ -1,10 +1,20 @@
 import 'package:flutter/material.dart';
-import 'package:jobspot_app/features/employer_dashboard/presentation/widgets/employer_job_card.dart';
+import 'package:jobspot_app/features/jobs/presentation/employer_job_card.dart';
 import 'package:jobspot_app/features/jobs/create_job_screen.dart';
 
+/// A tab widget for the employer dashboard that allows employers to manage their job postings.
+///
+/// It displays a list of jobs with their current status (open/closed) and
+/// provides functionality to create new jobs, filter existing ones, and perform
+/// actions like editing or closing a posting.
 class JobPostingTab extends StatelessWidget {
+  /// Creates a [JobPostingTab].
   const JobPostingTab({super.key});
 
+  /// Navigates to the [CreateJobScreen] where the employer can fill out
+  /// details for a new job opening.
+  ///
+  /// The [context] is used to find the [Navigator].
   void _navigateToCreateJob(BuildContext context) {
     Navigator.push(
       context,
@@ -24,7 +34,8 @@ class JobPostingTab extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             const SizedBox(height: 10),
-            // Fixed Header
+
+            /// Fixed header containing the title and notifications icon.
             Padding(
               padding: const EdgeInsets.fromLTRB(20, 20, 20, 0),
               child: Row(
@@ -65,7 +76,8 @@ class JobPostingTab extends StatelessWidget {
               ),
             ),
             const SizedBox(height: 24),
-            // Scrollable Content
+
+            /// Scrollable content area containing the list of job postings.
             Expanded(
               child: SingleChildScrollView(
                 physics: const AlwaysScrollableScrollPhysics(),
@@ -90,42 +102,50 @@ class JobPostingTab extends StatelessWidget {
                       ],
                     ),
                     const SizedBox(height: 16),
-                    // Job Cards
+
+                    /// List of job cards. In a real application, these would be
+                    /// dynamically generated from a list of jobs.
                     EmployerJobCard(
-                      company: 'Google Inc.',
-                      position: 'Senior UI/UX Designer',
-                      location: 'California, USA',
-                      salary: '\$120k - \$150k',
-                      type: 'Full Time',
-                      logo: Icons.g_mobiledata,
-                      logoColor: colorScheme.primary,
-                      status: 'open',
+                      job: const {
+                        'title': 'Senior UI/UX Designer',
+                        'work_mode': 'On-site',
+                        'location': 'California, USA',
+                        'pay_amount_min': 120000,
+                        'pay_amount_max': 150000,
+                        'pay_type': 'yearly',
+                        'is_active': true,
+                        'same_day_pay': true,
+                      },
                       onEdit: () {},
                       onClose: () {},
                     ),
                     const SizedBox(height: 12),
                     EmployerJobCard(
-                      company: 'Apple Inc.',
-                      position: 'Product Manager',
-                      location: 'New York, USA',
-                      salary: '\$140k - \$180k',
-                      type: 'Full Time',
-                      logo: Icons.apple,
-                      logoColor: colorScheme.secondary,
-                      status: 'open',
+                      job: const {
+                        'title': 'Senior UI/UX Designer',
+                        'work_mode': 'On-site',
+                        'location': 'California, USA',
+                        'pay_amount_min': 120000,
+                        'pay_amount_max': 150000,
+                        'pay_type': 'yearly',
+                        'is_active': true,
+                        'same_day_pay': true,
+                      },
                       onEdit: () {},
                       onClose: () {},
                     ),
                     const SizedBox(height: 12),
                     EmployerJobCard(
-                      company: 'Microsoft',
-                      position: 'Software Engineer',
-                      location: 'Seattle, USA',
-                      salary: '\$110k - \$145k',
-                      type: 'Remote',
-                      logo: Icons.business,
-                      logoColor: colorScheme.primary,
-                      status: 'closed',
+                      job: const {
+                        'title': 'Senior UI/UX Designer',
+                        'work_mode': 'On-site',
+                        'location': 'California, USA',
+                        'pay_amount_min': 120000,
+                        'pay_amount_max': 150000,
+                        'pay_type': 'yearly',
+                        'is_active': true,
+                        'same_day_pay': true,
+                      },
                       onEdit: () {},
                       onClose: () {},
                     ),
@@ -136,13 +156,15 @@ class JobPostingTab extends StatelessWidget {
             ),
           ],
         ),
-        // Fixed FAB
+
+        /// Floating action button to create a new job posting.
         Positioned(
           bottom: 20,
           right: 20,
           child: FloatingActionButton(
             onPressed: () => _navigateToCreateJob(context),
             backgroundColor: colorScheme.primary,
+            tooltip: 'Create New Job',
             child: const Icon(Icons.add, color: Colors.white),
           ),
         ),

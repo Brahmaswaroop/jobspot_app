@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:jobspot_app/core/theme/app_theme.dart';
 import 'package:jobspot_app/features/seeker_dashboard/presentation/widgets/stat_card.dart';
-import 'package:jobspot_app/features/seeker_dashboard/presentation/widgets/job_card.dart';
+import 'package:jobspot_app/features/jobs/presentation/job_card.dart';
 
 class HomeTab extends StatelessWidget {
   const HomeTab({super.key});
@@ -92,35 +92,53 @@ class HomeTab extends StatelessWidget {
               ),
               const SizedBox(height: 16),
               // Job Cards
-              const JobCard(
-                company: 'Google Inc.',
-                position: 'Senior UI/UX Designer',
-                location: 'California, USA',
-                salary: '\$120k - \$150k',
-                type: 'Full Time',
-                logo: Icons.g_mobiledata,
-                logoColor: AppColors.purple,
+              JobCard(
+                job: const {
+                  'title': 'Product Manager',
+                  'work_mode': 'Remote',
+                  'location': 'Mumbai, India',
+                  'pay_amount_min': 45000,
+                  'pay_amount_max': 60000,
+                  'pay_type': 'monthly',
+                  'working_days': ['Mon', 'Tue', 'Wed', 'Thu', 'Fri'],
+                  'shift_start': '09:00:00',
+                  'shift_end': '18:00:00',
+                },
+                onApply: () {},
               ),
+
               const SizedBox(height: 12),
-              const JobCard(
-                company: 'Apple Inc.',
-                position: 'Product Manager',
-                location: 'New York, USA',
-                salary: '\$140k - \$180k',
-                type: 'Full Time',
-                logo: Icons.apple,
-                logoColor: AppColors.orange,
+              JobCard(
+                job: const {
+                  'title': 'Product Manager',
+                  'work_mode': 'Remote',
+                  'location': 'Mumbai, India',
+                  'pay_amount_min': 45000,
+                  'pay_amount_max': 60000,
+                  'pay_type': 'monthly',
+                  'working_days': ['Mon', 'Tue', 'Wed', 'Thu', 'Fri'],
+                  'shift_start': '09:00:00',
+                  'shift_end': '18:00:00',
+                },
+                onApply: () {},
               ),
+
               const SizedBox(height: 12),
-              const JobCard(
-                company: 'Microsoft',
-                position: 'Software Engineer',
-                location: 'Seattle, USA',
-                salary: '\$110k - \$145k',
-                type: 'Remote',
-                logo: Icons.business,
-                logoColor: AppColors.purple,
+              JobCard(
+                job: const {
+                  'title': 'Product Manager',
+                  'work_mode': 'Remote',
+                  'location': 'Mumbai, India',
+                  'pay_amount_min': 45000,
+                  'pay_amount_max': 60000,
+                  'pay_type': 'monthly',
+                  'working_days': ['Mon', 'Tue', 'Wed', 'Thu', 'Fri'],
+                  'shift_start': '09:00:00',
+                  'shift_end': '18:00:00',
+                },
+                onApply: () {},
               ),
+
               const SizedBox(height: 12),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -134,43 +152,58 @@ class HomeTab extends StatelessWidget {
               SingleChildScrollView(
                 scrollDirection: Axis.horizontal,
                 child: Row(
-                  children: const [
+                  children: [
                     SizedBox(
                       width: 320, // Constrain the width of the JobCard
                       child: JobCard(
-                        company: 'Google Inc.',
-                        position: 'Senior UI/UX Designer',
-                        location: 'California, USA',
-                        salary: '\$120k - \$150k',
-                        type: 'Full Time',
-                        logo: Icons.g_mobiledata,
-                        logoColor: AppColors.purple,
+                        job: const {
+                          'title': 'Product Manager',
+                          'work_mode': 'Remote',
+                          'location': 'Mumbai, India',
+                          'pay_amount_min': 45000,
+                          'pay_amount_max': 60000,
+                          'pay_type': 'monthly',
+                          'working_days': ['Mon', 'Tue', 'Wed', 'Thu', 'Fri'],
+                          'shift_start': '09:00:00',
+                          'shift_end': '18:00:00',
+                        },
+                        onApply: () {},
                       ),
                     ),
-                    SizedBox(width: 12),
+                    const SizedBox(width: 12),
                     SizedBox(
                       width: 320, // Constrain the width of the JobCard
                       child: JobCard(
-                        company: 'Apple Inc.',
-                        position: 'Product Manager',
-                        location: 'New York, USA',
-                        salary: '\$140k - \$180k',
-                        type: 'Full Time',
-                        logo: Icons.apple,
-                        logoColor: AppColors.orange,
+                        job: const {
+                          'title': 'Product Manager',
+                          'work_mode': 'Remote',
+                          'location': 'Mumbai, India',
+                          'pay_amount_min': 45000,
+                          'pay_amount_max': 60000,
+                          'pay_type': 'monthly',
+                          'working_days': ['Mon', 'Tue', 'Wed', 'Thu', 'Fri'],
+                          'shift_start': '09:00:00',
+                          'shift_end': '18:00:00',
+                        },
+                        onApply: () {},
                       ),
                     ),
-                    SizedBox(width: 12),
+                    const SizedBox(width: 12),
                     SizedBox(
                       width: 320, // Constrain the width of the JobCard
                       child: JobCard(
-                        company: 'Microsoft',
-                        position: 'Software Engineer',
-                        location: 'Seattle, USA',
-                        salary: '\$110k - \$145k',
-                        type: 'Remote',
-                        logo: Icons.business,
-                        logoColor: AppColors.purple,
+                        job: const {
+                          'title': 'Product Manager',
+                          'work_mode': 'Remote',
+                          'location': 'Mumbai, India',
+                          'pay_amount_min': 45000,
+                          'pay_amount_max': 60000,
+                          'pay_type': 'monthly',
+                          'working_days': ['Mon', 'Tue', 'Wed', 'Thu', 'Fri'],
+                          'shift_start': '09:00:00',
+                          'shift_end': '18:00:00',
+                        },
+                        onApply: () {},
                       ),
                     ),
                   ],

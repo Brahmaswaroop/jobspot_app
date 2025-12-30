@@ -2,11 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:jobspot_app/features/admin_dashboard/presentation/screens/admin_dashboard_screen.dart';
 import 'package:jobspot_app/features/auth/presentation/screens/role_selection_screen.dart';
 import 'package:jobspot_app/features/auth/presentation/widgets/social_button.dart';
-
 import 'package:jobspot_app/features/seeker_dashboard/presentation/seeker_dashboard_screen.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
-
-import '../../../employer_dashboard/presentation/employer_dashboard_screen.dart';
+import 'package:jobspot_app/features/employer_dashboard/presentation/employer_dashboard_screen.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -79,8 +77,8 @@ class _LoginScreenState extends State<LoginScreen> {
                   height: 80,
                   width: 80,
                   decoration: BoxDecoration(
-                    gradient: const LinearGradient(
-                      colors: [Color(0xFF6C63FF), Color(0xFFFF6B35)],
+                    gradient: LinearGradient(
+                      colors: [colorScheme.primary, colorScheme.secondary],
                     ),
                     borderRadius: BorderRadius.circular(20),
                   ),
@@ -89,15 +87,13 @@ class _LoginScreenState extends State<LoginScreen> {
                 const SizedBox(height: 24),
                 Text(
                   'Welcome Back!',
-                  style: theme.textTheme.headlineLarge?.copyWith(
-                    fontSize: 32,
-                    fontWeight: FontWeight.bold,
-                    color: colorScheme.onSurface,
-                  ),
+                  textAlign: TextAlign.center,
+                  style: theme.textTheme.headlineLarge?.copyWith(fontSize: 32),
                 ),
                 const SizedBox(height: 8),
                 Text(
                   'Sign in to continue',
+                  textAlign: TextAlign.center,
                   style: theme.textTheme.bodyLarge?.copyWith(
                     color: colorScheme.onSurfaceVariant,
                   ),
@@ -247,13 +243,6 @@ class _LoginScreenState extends State<LoginScreen> {
                   },
                   icon: const Icon(Icons.phone_outlined),
                   label: const Text('Login with OTP'),
-                  style: OutlinedButton.styleFrom(
-                    padding: const EdgeInsets.symmetric(vertical: 16),
-                    side: BorderSide(color: colorScheme.outlineVariant),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(12),
-                    ),
-                  ),
                 ),
                 const SizedBox(height: 24),
                 // Sign Up Link
@@ -273,10 +262,7 @@ class _LoginScreenState extends State<LoginScreen> {
                           ),
                         );
                       },
-                      child: const Text(
-                        'Sign Up',
-                        style: TextStyle(fontWeight: FontWeight.w600),
-                      ),
+                      child: const Text('Sign Up'),
                     ),
                   ],
                 ),

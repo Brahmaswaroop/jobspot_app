@@ -9,20 +9,54 @@ class AppColors {
   static const Color grey = Color(0xFFF0F0F0);
   static const Color white = Color(0xFFFFFFFF);
   static const Color whiteBackground = Color(0xFFF8F8FA);
-  static const Color black = Color(0xFF000000);
+  static const Color black = Color(0xFF2D2D2D); // Softer black
   static const Color darkBackground = Color(0xFF121212);
   static const Color darkSurface = Color(0xFF1E1E1E);
   static const Color darkText = Colors.white70;
 }
 
 class AppTheme {
+  static InputDecorationTheme _buildInputDecoration(
+    Color fillColor,
+    Color borderColor,
+    Color focusColor,
+    Color labelColor,
+  ) {
+    return InputDecorationTheme(
+      filled: true,
+      fillColor: fillColor,
+      contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
+      border: OutlineInputBorder(
+        borderRadius: BorderRadius.circular(12),
+        borderSide: BorderSide(
+          color: borderColor.withValues(alpha: 0.7),
+          width: 2,
+        ),
+      ),
+      focusedBorder: OutlineInputBorder(
+        borderRadius: BorderRadius.circular(12),
+        borderSide: BorderSide(color: focusColor, width: 2),
+      ),
+      enabledBorder: OutlineInputBorder(
+        borderRadius: BorderRadius.circular(12),
+        borderSide: BorderSide(
+          color: borderColor.withValues(alpha: 0.7),
+          width: 2,
+        ),
+      ),
+      labelStyle: TextStyle(color: labelColor),
+      floatingLabelStyle: TextStyle(color: focusColor),
+      prefixIconColor: labelColor.withValues(alpha: 0.7),
+    );
+  }
+
   static ThemeData get lightTheme {
     return ThemeData(
       brightness: Brightness.light,
-      scaffoldBackgroundColor: AppColors.white,
+      scaffoldBackgroundColor: AppColors.whiteBackground,
       primaryColor: AppColors.purple,
       cardColor: Colors.white,
-      hintColor: Colors.grey[600],
+      hintColor: Colors.grey[500],
       colorScheme: ColorScheme.fromSwatch().copyWith(
         primary: AppColors.purple,
         secondary: AppColors.orange,
@@ -33,49 +67,48 @@ class AppTheme {
         foregroundColor: Colors.white,
         elevation: 0,
         centerTitle: true,
+        titleTextStyle: TextStyle(fontWeight: FontWeight.w600, fontSize: 20),
+      ),
+      chipTheme: ChipThemeData(
+        backgroundColor: AppColors.grey,
+        selectedColor: AppColors.purple,
+        secondaryLabelStyle: const TextStyle(color: Colors.white),
+        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+      ),
+      switchTheme: SwitchThemeData(
+        thumbColor: WidgetStateProperty.resolveWith(
+          (states) => states.contains(WidgetState.selected)
+              ? AppColors.white
+              : AppColors.purple,
+        ),
+        trackColor: WidgetStateProperty.resolveWith(
+          (states) => states.contains(WidgetState.selected)
+              ? AppColors.purple
+              : Colors.grey[300],
+        ),
       ),
       elevatedButtonTheme: ElevatedButtonThemeData(
         style: ElevatedButton.styleFrom(
-          backgroundColor: AppColors.orange,
+          backgroundColor: AppColors.purple,
           foregroundColor: Colors.white,
+          elevation: 2,
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(12),
           ),
-          padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
-        ),
-      ),
-      outlinedButtonTheme: OutlinedButtonThemeData(
-        style: OutlinedButton.styleFrom(
-          foregroundColor: AppColors.purple,
-          side: const BorderSide(color: AppColors.purple),
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(12),
+          padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
+          textStyle: const TextStyle(
+            fontWeight: FontWeight.bold,
+            fontSize: 16,
+            inherit: false,
           ),
         ),
       ),
-      textButtonTheme: TextButtonThemeData(
-        style: TextButton.styleFrom(foregroundColor: AppColors.purple),
-      ),
-      inputDecorationTheme: InputDecorationTheme(
-        filled: true,
-        fillColor: Colors.white,
-        contentPadding: const EdgeInsets.symmetric(
-          horizontal: 16,
-          vertical: 12,
-        ),
-        border: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(12),
-          borderSide: const BorderSide(color: Colors.grey, width: 2),
-        ),
-        focusedBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(12),
-          borderSide: const BorderSide(color: AppColors.purple, width: 2),
-        ),
-        enabledBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(12),
-          borderSide: const BorderSide(color: AppColors.orange, width: 2),
-        ),
-        labelStyle: const TextStyle(color: AppColors.black),
+      inputDecorationTheme: _buildInputDecoration(
+        Colors.white,
+        AppColors.purple,
+        AppColors.orange,
+        Colors.grey[700]!,
       ),
       textTheme: GoogleFonts.poppinsTextTheme().copyWith(
         headlineLarge: GoogleFonts.poppins(
@@ -84,7 +117,12 @@ class AppTheme {
           color: AppColors.darkPurple,
         ),
         headlineMedium: GoogleFonts.poppins(
-          fontSize: 20,
+          fontSize: 18,
+          fontWeight: FontWeight.w600,
+          color: AppColors.black,
+        ),
+        titleMedium: GoogleFonts.poppins(
+          fontSize: 16,
           fontWeight: FontWeight.w600,
           color: AppColors.black,
         ),
@@ -100,7 +138,7 @@ class AppTheme {
       scaffoldBackgroundColor: AppColors.darkBackground,
       primaryColor: AppColors.purple,
       cardColor: AppColors.darkSurface,
-      hintColor: Colors.grey[400],
+      hintColor: Colors.grey[500],
       colorScheme: const ColorScheme.dark().copyWith(
         primary: AppColors.purple,
         secondary: AppColors.orange,
@@ -112,14 +150,40 @@ class AppTheme {
         elevation: 0,
         centerTitle: true,
       ),
+      chipTheme: ChipThemeData(
+        backgroundColor: Colors.white10,
+        selectedColor: AppColors.purple,
+        labelStyle: const TextStyle(color: Colors.white70),
+        secondaryLabelStyle: const TextStyle(color: Colors.white),
+        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+        side: BorderSide.none,
+      ),
+      switchTheme: SwitchThemeData(
+        thumbColor: WidgetStateProperty.resolveWith(
+          (states) => states.contains(WidgetState.selected)
+              ? AppColors.white
+              : AppColors.purple,
+        ),
+        trackColor: WidgetStateProperty.resolveWith(
+          (states) => states.contains(WidgetState.selected)
+              ? AppColors.purple
+              : Colors.grey[800],
+        ),
+      ),
       elevatedButtonTheme: ElevatedButtonThemeData(
         style: ElevatedButton.styleFrom(
-          backgroundColor: AppColors.orange,
+          backgroundColor: AppColors.purple,
           foregroundColor: Colors.white,
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(12),
           ),
           padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
+          textStyle: const TextStyle(
+            fontWeight: FontWeight.bold,
+            fontSize: 16,
+            inherit: false,
+          ),
         ),
       ),
       outlinedButtonTheme: OutlinedButtonThemeData(
@@ -134,26 +198,11 @@ class AppTheme {
       textButtonTheme: TextButtonThemeData(
         style: TextButton.styleFrom(foregroundColor: AppColors.purple),
       ),
-      inputDecorationTheme: InputDecorationTheme(
-        filled: true,
-        fillColor: AppColors.darkSurface,
-        contentPadding: const EdgeInsets.symmetric(
-          horizontal: 16,
-          vertical: 12,
-        ),
-        border: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(12),
-          borderSide: const BorderSide(color: Colors.grey, width: 2),
-        ),
-        focusedBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(12),
-          borderSide: const BorderSide(color: AppColors.purple, width: 2),
-        ),
-        enabledBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(12),
-          borderSide: const BorderSide(color: AppColors.orange, width: 2),
-        ),
-        labelStyle: const TextStyle(color: AppColors.darkText),
+      inputDecorationTheme: _buildInputDecoration(
+        AppColors.darkSurface,
+        AppColors.purple,
+        AppColors.orange,
+        AppColors.darkText,
       ),
       textTheme: GoogleFonts.poppinsTextTheme(ThemeData.dark().textTheme)
           .copyWith(
@@ -163,9 +212,14 @@ class AppTheme {
               color: AppColors.orange,
             ),
             headlineMedium: GoogleFonts.poppins(
-              fontSize: 20,
+              fontSize: 18,
               fontWeight: FontWeight.w600,
               color: AppColors.darkText,
+            ),
+            titleMedium: GoogleFonts.poppins(
+              fontSize: 16,
+              fontWeight: FontWeight.w600,
+              color: Colors.white,
             ),
             bodyLarge: GoogleFonts.poppins(
               fontSize: 16,

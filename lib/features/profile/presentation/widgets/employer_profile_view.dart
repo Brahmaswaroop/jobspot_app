@@ -1,10 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:jobspot_app/core/theme/app_theme.dart';
 import 'package:jobspot_app/core/utils/supabase_service.dart';
 import 'package:jobspot_app/data/services/profile_service.dart';
 import 'package:jobspot_app/features/profile/presentation/widgets/edit_business_profile_dialog.dart';
 import 'package:jobspot_app/features/profile/presentation/widgets/profile_widgets.dart';
-import 'package:provider/provider.dart';
 
 class EmployerProfileView extends StatefulWidget {
   const EmployerProfileView({super.key});
@@ -15,6 +13,7 @@ class EmployerProfileView extends StatefulWidget {
 
 class _EmployerProfileViewState extends State<EmployerProfileView> {
   Map<String, dynamic>? _profile;
+  bool _isLoading = true;
 
   @override
   void initState() {
@@ -27,125 +26,38 @@ class _EmployerProfileViewState extends State<EmployerProfileView> {
       final user = SupabaseService.getCurrentUser();
       if (user != null) {
         _profile = await ProfileService.fetchEmployerProfile(user.id);
-        if (mounted) setState(() {});
+        if (mounted) {
+          setState(() {
+            _isLoading = false;
+          });
+        }
       }
     } catch (e) {
       if (mounted) {
+        setState(() => _isLoading = false);
         ScaffoldMessenger.of(
           context,
-        ).showSnackBar(SnackBar(content: Text('error1 $e')));
+        ).showSnackBar(SnackBar(content: Text('Error loading profile: $e')));
       }
     }
   }
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-    final textTheme = theme.textTheme;
-    final colorScheme = theme.colorScheme;
-    final themeNotifier = Provider.of<ThemeNotifier>(context);
+    if (_isLoading) {
+      return const Center(child: CircularProgressIndicator());
+    }
 
     return SingleChildScrollView(
-      padding: const EdgeInsets.all(20),
       child: Column(
         children: [
-          // Company Header
-          const SizedBox(height: 20),
-          CircleAvatar(
-            radius: 50,
-            backgroundColor: colorScheme.primary,
-            child: const Icon(Icons.business, size: 50, color: Colors.white),
-          ),
-          const SizedBox(height: 16),
-          Text(
-            _profile?['company_name'] ?? 'Loading...',
-            style: textTheme.headlineMedium?.copyWith(
-              fontWeight: FontWeight.bold,
-              color: colorScheme.onSurface,
-            ),
-          ),
-          Text(
-            '${_profile?['industry'] ?? ''} • ${_profile?['city'] ?? ''}',
-            style: textTheme.bodyMedium?.copyWith(
-              color: colorScheme.onSurfaceVariant,
-            ),
-          ),
-          const SizedBox(height: 32),
-
-          // Business Info Section
-          const ProfileSectionHeader(title: 'Business Information'),
-          const SizedBox(height: 12),
-          const ProfileInfoTile(
-            icon: Icons.language,
-            label: 'Website',
-            value: 'www.google.com',
-          ),
-          ProfileInfoTile(
-            icon: Icons.email_outlined,
-            label: 'Email',
-            value: _profile?['official_email'] ?? '',
-          ),
-          ProfileInfoTile(
-            icon: Icons.phone_outlined,
-            label: 'Phone',
-            value: _profile?['contact_mobile'] ?? '',
-          ),
-          ProfileInfoTile(
-            icon: Icons.location_on_outlined,
-            label: 'Address',
-            value: _profile?['city'] ?? '',
-          ),
-
-          const SizedBox(height: 32),
-
-          // Settings Section
-          const ProfileSectionHeader(title: 'Settings'),
-          const SizedBox(height: 12),
-          ProfileMenuTile(
-            icon: Icons.settings_display,
-            title: 'Dark Mode',
-            onTap: () {},
-            trailing: Row(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                AnimatedSwitcher(
-                  duration: const Duration(milliseconds: 300),
-                  transitionBuilder:
-                      (Widget child, Animation<double> animation) {
-                        return ScaleTransition(
-                          scale: animation,
-                          child: FadeTransition(
-                            opacity: animation,
-                            child: child,
-                          ),
-                        );
-                      },
-                  child: Icon(
-                    themeNotifier.isDarkMode
-                        ? Icons.dark_mode
-                        : Icons.light_mode,
-                    key: ValueKey<bool>(themeNotifier.isDarkMode),
-                    color: colorScheme.primary,
-                  ),
-                ),
-                const SizedBox(width: 8),
-                Switch(
-                  value: themeNotifier.isDarkMode,
-                  activeThumbColor: colorScheme.primary,
-                  onChanged: (value) {
-                    themeNotifier.setThemeMode(
-                      value ? ThemeMode.dark : ThemeMode.light,
-                    );
-                  },
-                ),
-              ],
-            ),
-          ),
-
-          ProfileMenuTile(
-            icon: Icons.edit_outlined,
-            title: 'Edit Business Profile',
-            onTap: () async {
+          // Header
+          ProfileHeader(
+            title: _profile?['company_name'] ?? 'Loading...',
+            subtitle:
+                '${_profile?['industry'] ?? 'Not Provided'} • ${_profile?['city'] ?? 'Not Provided'}',
+            fallbackIcon: Icons.business,
+            onEdit: () async {
               final result = await showDialog<bool>(
                 context: context,
                 builder: (context) =>
@@ -156,53 +68,79 @@ class _EmployerProfileViewState extends State<EmployerProfileView> {
               }
             },
           ),
-          ProfileMenuTile(
-            icon: Icons.notifications_none,
-            title: 'Notification Settings',
-            onTap: () {},
-          ),
-          ProfileMenuTile(
-            icon: Icons.security_outlined,
-            title: 'Security & Password',
-            onTap: () {},
-          ),
-          ProfileMenuTile(
-            icon: Icons.help_outline,
-            title: 'Help & Support',
-            onTap: () {},
-          ),
 
-          const SizedBox(height: 32),
+          const SizedBox(height: 20),
 
-          // Logout Button
-          SizedBox(
-            width: double.infinity,
-            child: OutlinedButton.icon(
-              onPressed: () async {
-                final messenger = ScaffoldMessenger.of(context);
-                try {
-                  await SupabaseService.signOut();
-                } catch (e) {
-                  messenger.showSnackBar(
-                    SnackBar(content: Text('Error signing out: $e')),
-                  );
-                }
-              },
-              icon: Icon(Icons.logout, color: colorScheme.error),
-              label: Text(
-                'Log Out',
-                style: TextStyle(color: colorScheme.error),
-              ),
-              style: OutlinedButton.styleFrom(
-                padding: const EdgeInsets.symmetric(vertical: 16),
-                side: BorderSide(color: colorScheme.error),
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(12),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 20),
+            child: Column(
+              children: [
+                // Business Info Section
+                const ProfileSectionHeader(title: 'Business Information'),
+                const SizedBox(height: 12),
+                const ProfileInfoTile(
+                  icon: Icons.language,
+                  label: 'Website',
+                  value: 'www.google.com',
                 ),
-              ),
+                ProfileInfoTile(
+                  icon: Icons.email_outlined,
+                  label: 'Official Email',
+                  value: _profile?['official_email'] ?? 'Not provided',
+                ),
+                ProfileInfoTile(
+                  icon: Icons.phone_outlined,
+                  label: 'Contact Number',
+                  value: _profile?['contact_mobile'] ?? 'Not provided',
+                ),
+                ProfileInfoTile(
+                  icon: Icons.location_on_outlined,
+                  label: 'City',
+                  value: _profile?['city'] ?? 'Not provided',
+                ),
+
+                const SizedBox(height: 24),
+
+                // Settings Section
+                const ProfileSectionHeader(title: 'Settings'),
+                const SizedBox(height: 12),
+                const ThemeModeTile(),
+                ProfileMenuTile(
+                  icon: Icons.notifications_none,
+                  title: 'Notification Settings',
+                  onTap: () {},
+                ),
+                ProfileMenuTile(
+                  icon: Icons.security_outlined,
+                  title: 'Security & Password',
+                  onTap: () {},
+                ),
+                ProfileMenuTile(
+                  icon: Icons.help_outline,
+                  title: 'Help & Support',
+                  onTap: () {},
+                ),
+
+                const SizedBox(height: 32),
+
+                // Logout Button
+                LogoutButton(
+                  onLogout: () async {
+                    try {
+                      await SupabaseService.signOut();
+                    } catch (e) {
+                      if (mounted) {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(content: Text('Error signing out: $e')),
+                        );
+                      }
+                    }
+                  },
+                ),
+                const SizedBox(height: 40),
+              ],
             ),
           ),
-          const SizedBox(height: 40),
         ],
       ),
     );
